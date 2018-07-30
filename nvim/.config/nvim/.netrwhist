@@ -1,5 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
-let g:netrw_dirhist_1='/home/leodag/.vim'
-let g:netrw_dirhist_2='/home/leodag/grisufrj.github.io/_posts'
-let g:netrw_dirhist_3='/mnt/data-hdd/leodag/proj/simulador_ad/b'
