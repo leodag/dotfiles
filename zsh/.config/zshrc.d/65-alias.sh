@@ -46,4 +46,3 @@ alias totswap="free -m | grep Swap: | awk '{print \$2}'"
 
 #alias docker='sudo docker'
 #alias docker-compose='sudo docker-compose'
-

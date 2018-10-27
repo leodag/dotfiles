@@ -51,5 +51,3 @@ function () {
 %F{$U_C}%B[%*]%b%F{$U_C}[%F{$UN_C}%n%F{$U_C}@%m %4~]%B%f
 %#%b "
 }
-
-

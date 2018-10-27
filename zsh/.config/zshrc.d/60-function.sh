@@ -1,23 +1,23 @@
 up() {
     local n=${1:-1}
 
-    case "${1#[-+]}" in
+    case "${n#[-+]}" in
         *[!0-9]* ) echo Not a number: $1
                    return 2
                    ;;
     esac
 
-    if (( $1 < 1 )); then
+    if (( $n < 1 )); then
         return 1
     fi
 
-    for i in {1..$1}; do
+    for i in {1..$n}; do
         cd ..
     done
 }
 
 md5() {
-    echo -n $@ | md5sum | awk '{ printf "%s", $1 }'
+    echo -n "$@" | md5sum | awk '{ printf "%s\n", $1 }'
 }
 
 x() {
@@ -59,3 +59,13 @@ x() {
     fi
 }
 
+export-terminfo() {
+    if [[ $# == 1 ]]; then
+        for key val in ${(kv)terminfo}; do
+            echo "$key -> $val;;"
+        done > "$1"
+    else
+        echo "Usage: $0 filename"
+        return 50
+    fi
+}
