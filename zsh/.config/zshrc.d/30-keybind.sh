@@ -11,6 +11,8 @@ if [[ -n "$TILIX_ID" ]]; then
     keys[kclft]="\e[1;5D"
     # C-<Backspace>
     keys[kcbs]="^H"
+    # C-<Delete>
+    keys[kcdch1]="\e[3;5~"
 fi
 
 # Make sure the terminal is in application mode, when zle is
@@ -37,6 +39,10 @@ key() {
 bind-if-exists() {
     k=$(key $1)
     [[ -n "$k" ]] && bindkey "$k" "$2"
+
+    if [[ -n "$DEBUGKEYS" && -z "$k" ]]; then
+        echo "Key $1 not found"
+    fi
 }
 
 # Home
@@ -58,6 +64,8 @@ bind-if-exists kcbt reverse-menu-complete
 
 # C-<backspace>
 bind-if-exists kcbs backward-kill-word
+# C-<Delete>
+bind-if-exists kcdch1 kill-word
 
 # C-<Right>
 bind-if-exists kcrit emacs-forward-word
