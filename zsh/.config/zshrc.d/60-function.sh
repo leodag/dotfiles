@@ -59,6 +59,18 @@ x() {
     fi
 }
 
+command-exists() {
+    which "$1" > /dev/null 2>&1
+}
+
+commands-exist() {
+    while [[ $# != 0 ]] && command-exists "$1"; do
+        shift
+    done
+
+    return $#
+}
+
 export-terminfo() {
     if [[ $# == 1 ]]; then
         for key val in ${(kv)terminfo}; do
@@ -69,3 +81,4 @@ export-terminfo() {
         return 50
     fi
 }
+
