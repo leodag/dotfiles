@@ -48,7 +48,7 @@
 
 (straight-use-package 'use-package)
 
-(setq use-package-always-ensure t)
+;;(setq use-package-always-ensure t)
 (setq straight-use-package-by-default t)
 
 (defun split-window-vertically-and-switch ()
@@ -82,6 +82,8 @@
   :config
   (load-theme 'solarized-light t))
 
+(use-package diminish)
+
 ;; General setup
 (use-package evil
   :config
@@ -104,8 +106,7 @@
   (counsel-mode 1))
 
 (use-package swiper ; better I-search
-  :bind (("C-s" . swiper)
-         ("C-r" . swiper)))
+  :bind ("C-s" . swiper))
 
 (use-package tramp :straight nil)
 
@@ -114,7 +115,6 @@
 ;(use-package counsel-tramp) ; tramp interface
 ;(use-package docker-tramp)
 ;(use-package vagrant-tramp)
-
 
 (use-package projectile
   :after which-key
@@ -126,9 +126,14 @@
                                         "C-c p 5" "other-frame"
                                         "C-c p s" "search"
                                         "C-c p x" "execute")
-  :bind-keymap ("C-c p" . projectile-command-map))
+  :bind-keymap* ("C-c p" . projectile-command-map))
 
-;(use-package counsel-projectile)
+(use-package es-lib)
+(use-package es-windows)
+
+(use-package project-explorer)
+
+(use-package counsel-projectile)
 
 (use-package helm
   :config
@@ -189,12 +194,13 @@
          ("C-M-r"     . split-window-horizontally-and-switch)
          ("C-M-d"     . split-window-vertically-and-switch  )))
 
-(use-package winner ; buffer layout history (C-<left>/<right>)
+(use-package winner ; buffer layout history (C-c <left>/<right>)
   :config
   (winner-mode 1))
 
 (use-package ws-butler ; cleans trailing whitespaces
-  :hook (prog-mode . ws-butler-mode))
+  :hook (prog-mode . ws-butler-mode)
+  :delight ws-butler-mode)
 
 ;; General programming
 (use-package flycheck
@@ -252,6 +258,10 @@
     "C-c a v"   "eval"
     "C-c a o"   "macroexpand"
     "C-c a f"   "info"))
+
+;; Clojure setup
+
+(use-package cider)
 
 ;; C++ setup
 (use-package irony
