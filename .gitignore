@@ -1,6 +1,5 @@
-nvim/.config/nvim/.netrwhist
-emacs/.emacs.d/recentf
-emacs/.emacs.d/auto-save-list
-emacs/.emacs.d/elpa
-emacs/.emacs.d/straight
-
+**
+!emacs/.emacs.d/init.el
+!nvim/.config/nvim/init.vim
+!zsh/.zshrc
+!zsh/.config/zshrc.d/*
