@@ -4,4 +4,3 @@
 for f in $HOME/.config/zshrc.d/*.sh; do
     source "$f"
 done
-

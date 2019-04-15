@@ -40,4 +40,3 @@ highlight Search ctermbg=green ctermfg=white
 "set cursorline
 
 set clipboard=unnamedplus " use X secondary clipboard
-
