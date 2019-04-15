@@ -282,6 +282,10 @@
   :config
   (setq magit-completing-read-function 'ivy-completing-read))
 
+;; evil-magit needs transient, but can't find recipe
+;(use-package transient)
+;(use-package evil-magit)
+
 (use-package flycheck
   :after which-key
   :config
@@ -363,6 +367,13 @@
 (use-package flycheck-irony
   :after flycheck
   :hook (flycheck-mode . flycheck-irony-setup))
+
+;;; Python setup
+(use-package anaconda-mode
+  :hook ((python-mode . anaconda-mode)
+         (python-mode . anaconda-eldoc-mode)))
+
+(use-package company-anaconda)
 
 ;;;; SCRATCH
 
