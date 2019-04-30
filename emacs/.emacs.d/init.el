@@ -22,13 +22,29 @@
 (blink-cursor-mode -1)
 (setq inhibit-startup-screen t)
 
-(setq-default indicate-empty-lines t) ; small indicator on lines that don't exist at the end of the file
-(set-face-attribute 'default nil :font "Fira Mono-10")
+;; Small indicator on lines that don't exist at the end of the file
+(setq-default indicate-empty-lines t)
 
-(setq-default scroll-margin 4)
-(setq-default scroll-step 1)
+(setq-default scroll-margin 5)
+; A value over 100 implies never recentering
+(setq-default scroll-conservatively 101)
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(if (member "Fira Mono" (font-family-list))
+    (setq monospace-font "Fira Mono")
+  (setq monospace-font (face-attribute 'default :family))
+  (message "Fira Mono not installed!"))
+
+(defun mono-font (pt)
+  "Generates a font spec for the monospace font at specified size (in points)"
+  (font-spec :family monospace-font :size (float pt)))
+
+;(set-face-attribute 'default nil :family monospace-font)
+(set-face-attribute 'default nil :font "Fira Mono-10")
+
+;; is it the right way tho
+(add-to-list 'default-frame-alist '(font . "Fira Mono-10"))
 
 ;; Straight bootstrapping and configuration
 (let ((bootstrap-file (concat user-emacs-directory "straight/repos/straight.el/bootstrap.el"))
@@ -42,10 +58,10 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(setq use-package-compute-statistics t)
+
 (straight-use-package 'use-package)
 
-;; not needed with straight.el
-;(setq use-package-always-ensure t)
 (setq straight-use-package-by-default t)
 
 ;; Utility functions
@@ -82,31 +98,49 @@
   (load-theme 'solarized-light t))
 
 ;; Allows minor mode name manipulation
-(use-package delight)
+(use-package delight :defer t)
 
 ;;; Utilities
-(use-package tramp :straight nil)
+(use-package tramp :defer t :straight nil)
 
-(use-package ag)
-(use-package ripgrep)
+(use-package ag :defer t)
+(use-package ripgrep :defer t)
 
-(use-package all-the-icons)
+(use-package all-the-icons :defer t)
 
 ;;; General setup
 (use-package whitespace
   :delight global-whitespace-mode
-  :custom-face (whitespace-tab ((t (:background "dim gray" :foreground "tan"))))
+  :custom-face
+  (whitespace-tab ((t (:background "dim gray" :foreground "tan"))))
   :config
   (setq-default indent-tabs-mode nil) ; use spaces instead of tabs
   (setq whitespace-style
         '(face trailing tabs spaces newline empty space-after-tab
                space-before-tab tab-mark))
-  (global-whitespace-mode 1))
+  (global-whitespace-mode))
 
-(use-package display-line-numbers
-  :hook ((prog-mode text-mode) . display-line-numbers-mode)
-  :config
-  (setq display-line-numbers-type 'relative))
+(use-package tooltip :straight nil
+  :custom-face
+  (tooltip ((t (:background "white" :foreground "black" :font "Fira Sans-10")))))
+
+;; Maybe a better way?
+(if (not (version<= emacs-version "26.0"))
+    (use-package display-line-numbers
+      :hook ((prog-mode text-mode) . display-line-numbers-mode)
+      :config
+      (setq display-line-numbers-type 'relative))
+  (use-package nlinum-relative
+    :hook ((prog-mode text-mode) . nlinum-relative-mode)
+    :config
+    (setq nlinum-relative-redisplay-delay 0)
+    (nlinum-relative-setup-evil)))
+
+;; Command interaction mode
+(use-package comint :straight nil
+  :bind (:map comint-mode-map
+              ([up] . comint-previous-input)
+              ([down] . comint-next-input)))
 
 ;; Auto-reload modified files; warn on changes file
 (use-package autorevert
@@ -118,7 +152,7 @@
 (use-package undo-tree
   :delight
   :config
-  (global-undo-tree-mode 1))
+  (global-undo-tree-mode))
 
 ;; vi keybindings
 (use-package evil
@@ -140,9 +174,13 @@
   :delight
   :config
   (ivy-mode 1)
-  (setq ivy-count-format "(%d/%d) ") ; display (current/total) instead of just total
-  (setq ivy-format-function 'ivy-format-function-line) ; highlight the entire line
+  ;; Display (current/total) instead of just total
+  (setq ivy-count-format "(%d/%d) ")
+  ;; Highlight the entire line
+  (setq ivy-format-function 'ivy-format-function-line)
   (setq ivy-use-selectable-prompt t))
+
+(use-package ivy-hydra)
 
 (use-package counsel
   :delight
@@ -165,6 +203,7 @@
   (helm-autoresize-mode 1)
   ;(setq helm-split-window-inside-p t) ; only split current buffer
   (setq helm-autoresize-min-height 25)
+  (setq helm-full-frame t)
   (setq helm-autoresize-max-height 35))
 
 ; Complete with helm
@@ -183,12 +222,13 @@
                                         "C-c p s" "search"
                                         "C-c p x" "execute"))
 
-(use-package counsel-projectile)
+(use-package counsel-projectile
+  :after projectile)
 
 (use-package treemacs
   :after evil
   :commands (treemacs-is-treemacs-window-selected? treemacs-select-window)
-  :bind (([f8] . treemacs-open-select-or-close)
+  :bind (([f8] . treemacs-select-or-deselect)
          :map treemacs-mode-map
          ([mouse-1] . treemacs-single-click-expand-action))
   :config
@@ -211,7 +251,10 @@
   (treemacs-follow-mode 1)
   (treemacs-filewatch-mode 1)
   (treemacs-fringe-indicator-mode 1)
-  (treemacs-git-mode 'deferred))
+  (treemacs-git-mode
+   (pcase system-type
+     ('gnu/linux 'deferred)
+     ('windows-nt 'simple))))
 
 (defun treemacs-open-select-or-close ()
   "Opens treemacs if it is not already open, select if it is visible but not selected, and closes it if it is selected."
@@ -220,29 +263,38 @@
       (delete-window (selected-window))
     (treemacs-select-window)))
 
+(defun treemacs-select-or-deselect ()
+  "Opens treemacs if it is not already open, select if it is visible but not selected, and select last selected window if it is selected."
+  (interactive)
+  (if (treemacs-is-treemacs-window-selected?)
+      (select-window (get-mru-window))
+    (treemacs-select-window)))
+
 ;; Makes buffer names be unique
 (use-package uniquify :straight nil
   :config
   (setq uniquify-buffer-name-style 'forward))
 
 ;; Highlights parentheses enclosing point
-(use-package highlight-parentheses ; TODO: cagado
+(use-package highlight-parentheses
   :delight
   :hook (prog-mode . highlight-parentheses-mode)
-  :custom-face (hl-paren-face ((t (:weight bold))))
+  :custom-face
+  (hl-paren-face ((t (:weight bold))))
   :config
   ;; only highlights as many levels of parens as the length of this list
-  (setq hl-paren-colors '(nil nil nil nil nil nil)))
+  (setq hl-paren-colors '(nil nil nil nil nil nil nil nil)))
 
 ;; Highlight matching paren
 (use-package paren
   :hook (prog-mode . show-paren-mode)
-  :custom-face (show-paren-match ((t (:foreground "black")))))
+  :custom-face
+  (show-paren-match ((t (:foreground "black")))))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
   ;;; The following lines are not relevant anymore, but the bug is still
-  ;;; present so they are kept for documentation purposes.
+  ;;; present so they are kept in my init for documentation purposes.
   ;; for sime reason, depth-%d faces don't actually inherit base-face,
   ;; even though it is specified when defined
   ;(set-face-attribute 'rainbow-delimiters-base-face nil :weight 'bold)
@@ -287,18 +339,23 @@
 ;(use-package evil-magit)
 
 (use-package flycheck
-  :after which-key
+  :after (which-key evil)
   :config
-  (global-flycheck-mode 1)
+  (global-flycheck-mode)
   (which-key-add-key-based-replacements "C-c !" "flycheck-prefix")
-  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc)) ; annoying init.el warning
+  (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
+  ;; Remove annoying init.el warning
+  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  ;; TODO: make this work and exclude yamllint-document-start in yamllint's use
+  ;;(add-to-list (default-value 'flycheck-disabled-checkers) 'emacs-lisp-checkdoc)
+  ;; All this just to limit height
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*Flycheck errors*" eos)
                  (display-buffer-reuse-window
                   display-buffer-in-side-window)
                  (side            . bottom)
                  (reusable-frames . visible)
-                 (window-height   . 12)))) ; all this just to limit height
+                 (window-height   . 12))))
 
 (use-package company
   :delight
@@ -308,9 +365,9 @@
   (setq company-idle-delay 1.5))
 
 ;;; Rust setup
-(use-package toml-mode)
+(use-package toml-mode :defer t)
 
-(use-package rust-mode)
+(use-package rust-mode :defer t)
 
 (use-package cargo
   :hook (rust-mode . cargo-minor-mode))
@@ -324,7 +381,7 @@
 
 ;;; Elixir setup
 (use-package alchemist
-  :after which-key
+  :after (elixir-mode which-key)
   :config
   (which-key-add-major-mode-key-based-replacements 'elixir-mode
     "C-c a"     "alchemist"
@@ -342,7 +399,7 @@
     "C-c a f"   "info"))
 
 ;;; Clojure setup
-(use-package cider)
+(use-package cider :after clojure-mode)
 
 ;;; C++ setup
 (use-package irony
@@ -352,20 +409,20 @@
          (irony-mode . irony-cdb-autosetup-compile-options)))
 
 (use-package irony-eldoc
+  :disabled
   :hook (irony-mode . irony-eldoc))
 
-(use-package company-irony
-  :after company
+(use-package company-irony :after irony
   :config
   (add-to-list 'company-backends 'company-irony))
 
-(use-package company-irony-c-headers
-  :after company
+(use-package company-irony-c-headers :after irony
   :config
   (add-to-list 'company-backends 'company-irony-c-headers))
 
+;; Disabled because it causes eager loading of irony
 (use-package flycheck-irony
-  :after flycheck
+  :disabled
   :hook (flycheck-mode . flycheck-irony-setup))
 
 ;;; Python setup
@@ -373,27 +430,64 @@
   :hook ((python-mode . anaconda-mode)
          (python-mode . anaconda-eldoc-mode)))
 
-(use-package company-anaconda)
+(use-package company-anaconda
+  :after anaconda-mode
+  :config
+  (add-to-list 'company-backends 'company-anaconda))
 
 ;;;; SCRATCH
-
-;; also not working, like the ones below
+;; wasn't working before - idk why works now
 (use-package treemacs-projectile
   :bind (([M-f8] . treemacs-projectile)))
 
-;; why doesn't this work?
-;(use-package treemacs-evil)
-;(use-package treemacs-magit)
-;(use-package treemacs-icons-dired)
+(use-package treemacs-evil :after treemacs)
+(use-package treemacs-magit :after treemacs)
+(use-package treemacs-icons-dired
+  :hook (dired-mode . treemacs-icons-dired-mode))
 
 ;;; C# setup
 (use-package omnisharp
-  :after flycheck company
+  :after (flycheck company)
   :hook ((csharp-mode . omnisharp-mode)
          (csharp-mode . flycheck-mode))
   :config
-  (add-to-list 'company-backends #'company-omnisharp)
-  (setq omnisharp-expected-server-version "1.32.18")
-  (setq omnisharp-server-executable-path
-        (concat user-emacs-directory "omnisharp/run"))
-  (setq omnisharp-debug t))
+  (add-to-list 'company-backends 'company-omnisharp)
+  ;(setq omnisharp-debug t)
+  (setq omnisharp-expected-server-version "1.32.18"))
+  ;;(setq omnisharp-server-executable-path
+  ;;      (concat user-emacs-directory "omnisharp/run"))
+
+(use-package persp-mode)
+
+(use-package js2-mode
+  :mode ("\\.js\\'"
+         ("\\.jsx\\'" . js2-jsx-mode))
+  :interpreter "node")
+
+(use-package json-mode :defer t)
+
+(use-package tern
+  :hook (js2-mode . tern-mode)
+  :config
+  ;; tern tries to infer bin/tern path from  location - doesn't play
+  ;; nicely with straight, since it relocates the elisp files.
+  (setq tern-command
+        `("node"
+          ,(expand-file-name ; needed on Windows to expand ~
+            (concat user-emacs-directory "straight/repos/tern/bin/tern")))))
+
+(use-package company-tern
+  :after tern
+  :config
+  (add-to-list 'company-backends 'company-tern))
+
+;; js-doc
+;; json-reformat
+;; json-snatcher
+;; flymake-json
+;; eslint
+
+(use-package yaml-mode :defer t)
+
+(use-package flycheck-yamllint
+  :hook (flycheck-mode . flycheck-yamllint-setup))
