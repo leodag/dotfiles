@@ -25,9 +25,13 @@
 ;; Small indicator on lines that don't exist at the end of the file
 (setq-default indicate-empty-lines t)
 
-(setq-default scroll-margin 5)
-; A value over 100 implies never recentering
-(setq-default scroll-conservatively 101)
+;; Amount of lines to keep above/below point
+(setq scroll-margin 5)
+;; A value over 100 implies never recentering
+(setq scroll-conservatively 101)
+
+;; TODO: use-package mwheel
+(setq mouse-wheel-progressive-speed nil)
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
