@@ -40,33 +40,59 @@
   (setq monospace-font (face-attribute 'default :family))
   (message "Fira Mono not installed!"))
 
+;; TODO: better base face?
+(if (member "Fira Sans" (font-family-list))
+    (setq sans-serif-font "Fira Sans")
+  (setq sans-serif-font (face-attribute 'variable-pitch :family))
+  (message "Fira Sans not installed!"))
+
+(defun font-at-size (family pt)
+  "Generates a font spec for the desired font at specified size (in points)"
+  (font-spec :family family :size (float pt)))
+
 (defun mono-font (pt)
   "Generates a font spec for the monospace font at specified size (in points)"
-  (font-spec :family monospace-font :size (float pt)))
+  (font-at-size monospace-font pt))
 
-;(set-face-attribute 'default nil :family monospace-font)
-(set-face-attribute 'default nil :font "Fira Mono-10")
+(defun sans-font (pt)
+  "Generates a font spec for the sans serif font at specified size (in points)"
+  (font-at-size sans-serif-font pt))
 
-;; is it the right way tho
-(add-to-list 'default-frame-alist '(font . "Fira Mono-10"))
+(set-face-attribute 'default nil :font (mono-font 10))
 
-;; Straight bootstrapping and configuration
-(let ((bootstrap-file (concat user-emacs-directory "straight/repos/straight.el/bootstrap.el"))
-      (bootstrap-version 3))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+(setq package-manager 'straight)
+
+(pcase package-manager
+  ('straight
+   ;; Straight bootstrapping and configuration
+   (let ((bootstrap-file (concat user-emacs-directory "straight/repos/straight.el/bootstrap.el"))
+         (bootstrap-version 3))
+     (unless (file-exists-p bootstrap-file)
+       (with-current-buffer
+           (url-retrieve-synchronously
+            "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+            'silent 'inhibit-cookies)
+         (goto-char (point-max))
+         (eval-print-last-sexp)))
+     (load bootstrap-file nil 'nomessage))
+
+   (straight-use-package 'use-package)
+   (setq straight-use-package-by-default t))
+
+  ('package
+   (require 'package)
+   (setq package-enable-at-startup nil)
+   (add-to-list 'package-archives '("melpa" . "https://stable.melpa.org/packages/"))
+   (package-initialize t)
+
+   (unless (package-installed-p 'use-package)
+     (package-refresh-contents)
+     (package-install 'use-package))
+
+   (require 'use-package)
+   (setq use-package-always-ensure t)))
 
 (setq use-package-compute-statistics t)
-
-(straight-use-package 'use-package)
-
-(setq straight-use-package-by-default t)
 
 ;; Utility functions
 (defun split-window-vertically-and-switch ()
