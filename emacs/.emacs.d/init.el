@@ -150,9 +150,12 @@
                space-before-tab tab-mark))
   (global-whitespace-mode))
 
+;; Changes tooltip color on Windows
 (use-package tooltip :straight nil
-  :custom-face
-  (tooltip ((t (:background "white" :foreground "black" :font "Fira Sans-10")))))
+  :config
+  (custom-set-faces
+   `(tooltip
+     ((t (:background "white" :foreground "black" :font ,(sans-font 10)))))))
 
 ;; Maybe a better way?
 (if (not (version<= emacs-version "26.0"))
@@ -232,8 +235,8 @@
   :config
   (helm-autoresize-mode 1)
   ;(setq helm-split-window-inside-p t) ; only split current buffer
-  (setq helm-autoresize-min-height 25)
   (setq helm-full-frame t)
+  (setq helm-autoresize-min-height 25)
   (setq helm-autoresize-max-height 35))
 
 ; Complete with helm
@@ -264,7 +267,7 @@
   :config
   (evil-set-initial-state 'treemacs-mode 'emacs)
 
-  (let ((font "Fira Sans-9"))
+  (let ((font (sans-font 9)))
     (set-face-attribute 'treemacs-root-face      nil :font font)
     (set-face-attribute 'treemacs-file-face      nil :font font)
     (set-face-attribute 'treemacs-directory-face nil :font font)
