@@ -213,7 +213,7 @@
   (setq ivy-format-function 'ivy-format-function-line)
   (setq ivy-use-selectable-prompt t))
 
-(use-package ivy-hydra)
+(use-package ivy-hydra :after ivy)
 
 (use-package counsel
   :delight
@@ -258,7 +258,7 @@
 (use-package counsel-projectile
   :after projectile)
 
-(use-package treemacs
+(use-package treemacs :defer 2
   :after evil
   :commands (treemacs-is-treemacs-window-selected? treemacs-select-window)
   :bind (([f8] . treemacs-select-or-deselect)
@@ -474,7 +474,7 @@
   :bind (([M-f8] . treemacs-projectile)))
 
 (use-package treemacs-evil :after treemacs)
-(use-package treemacs-magit :after treemacs)
+(use-package treemacs-magit :after (treemacs magit))
 (use-package treemacs-icons-dired
   :hook (dired-mode . treemacs-icons-dired-mode))
 
