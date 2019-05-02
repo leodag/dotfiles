@@ -77,8 +77,28 @@ export-terminfo() {
             echo "$key -> $val;;"
         done > "$1"
     else
+        echo "Exports all terminfo entries to a file. Kinda buggy, but works"
         echo "Usage: $0 filename"
         return 50
     fi
 }
 
+# pacdiff is taken by pacman-contrib
+pacfilediff() {
+    if [[ $# != 1 || ! -f "$1" ]]; then
+        echo "Diffs a file and it's original version"
+        echo "Usage: $0 filename"
+        return 50
+    fi
+
+    local pkg=$(pacman -Qoq "$1")
+    if [[ $? != 0 ]]; then
+        echo "Error: No package owns $1"
+        return 51
+    fi
+    local ver=$(pacman -Q "$pkg" | cut -d' ' -f2)
+    local tarpath=$(realpath "$1")
+    tarpath=${tarpath#/}
+
+    tar xOf /var/cache/pacman/pkg/$pkg-$ver-*.pkg.tar.xz "$tarpath" | diff - "$1"
+}
