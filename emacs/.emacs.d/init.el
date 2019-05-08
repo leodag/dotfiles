@@ -504,9 +504,12 @@
 (use-package persp-mode)
 
 (use-package js2-mode
+  :interpreter "node"
   :mode ("\\.js\\'"
-         ("\\.jsx\\'" . js2-jsx-mode))
-  :interpreter "node")
+         ("\\.jsx\\'" . js2-jsx-mode)))
+
+(use-package js2-refactor
+  :hook (js2-mode . js2-refactor-mode))
 
 (use-package json-mode :defer t)
 
