@@ -25,6 +25,10 @@
 ;; Small indicator on lines that don't exist at the end of the file
 (setq-default indicate-empty-lines t)
 
+(setq-default truncate-lines nil)
+
+(setq ring-bell-function 'ignore)
+
 ;; Amount of lines to keep above/below point
 (setq scroll-margin 5)
 ;; A value over 100 implies never recentering
