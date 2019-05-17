@@ -21,6 +21,8 @@
 (tool-bar-mode -1)
 (blink-cursor-mode -1)
 (setq inhibit-startup-screen t)
+;; Disable "You can run the command {} with M-x {}" message
+(setq suggest-key-bindings nil)
 
 ;; Small indicator on lines that don't exist at the end of the file
 (setq-default indicate-empty-lines t)
