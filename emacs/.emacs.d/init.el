@@ -384,11 +384,15 @@
 ;(use-package transient)
 ;(use-package evil-magit)
 
-(use-package flycheck
+(use-package flycheck :defer nil
   :after (which-key evil)
+  :bind (:map flycheck-error-list-mode-map
+              ("k" . flycheck-error-list-previous-error)
+              ("j" . flycheck-error-list-next-error))
+  :bind-keymap ("C-c !" . flycheck-command-map)
   :config
   (global-flycheck-mode)
-  (which-key-add-key-based-replacements "C-c !" "flycheck-prefix")
+  (which-key-add-key-based-replacements "C-c !" "flycheck")
   (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
   ;; Remove annoying init.el warning
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
