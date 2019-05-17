@@ -71,6 +71,18 @@ commands-exist() {
     return $#
 }
 
+add-to-path() {
+    if [[ $# != 1 ]]; then
+        echo "Adds a directory to PATH, if it exists"
+        echo "Usage: $0 directory"
+        return 55
+    fi
+
+    if [[ -d "$1" ]]; then
+        PATH=$1:$PATH
+    fi
+}
+
 export-terminfo() {
     if [[ $# == 1 ]]; then
         for key val in ${(kv)terminfo}; do
