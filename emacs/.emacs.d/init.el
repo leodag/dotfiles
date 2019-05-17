@@ -127,9 +127,10 @@
   (load-file "~/.emacs.d/init.el"))
 
 ;; Themes
-(use-package solarized-theme
-  :config
-  (load-theme 'solarized-light t))
+(if window-system
+    (use-package solarized-theme
+      :config
+      (load-theme 'solarized-light t)))
 
 ;; Allows minor mode name manipulation
 (use-package delight :defer t)
