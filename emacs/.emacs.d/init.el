@@ -167,7 +167,8 @@
     (use-package display-line-numbers
       :hook ((prog-mode text-mode) . display-line-numbers-mode)
       :config
-      (setq display-line-numbers-type 'relative))
+      (setq display-line-numbers-type 'relative)
+      (setq display-line-numbers-grow-only t))
   (use-package nlinum-relative
     :hook ((prog-mode text-mode) . nlinum-relative-mode)
     :config
