@@ -121,7 +121,7 @@
 (defun edit-init ()
   "Edit init.el"
   (interactive)
-  (find-file "~/.emacs.d/init.el"))
+  (find-file (find-lisp-object-file-name 'edit-init nil)))
 
 (defun reload-init ()
   "Reload init.el"
