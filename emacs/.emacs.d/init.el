@@ -355,12 +355,12 @@
 
 ; Directional window selection
 (use-package windmove
-  :bind (("M-<up>"    . windmove-up   )
-         ("M-<down>"  . windmove-down )
-         ("M-<right>" . windmove-right)
-         ("M-<left>"  . windmove-left )
-         ("C-M-r"     . split-window-horizontally-and-switch)
-         ("C-M-d"     . split-window-vertically-and-switch  )))
+  :bind* (("M-<up>"    . windmove-up   )
+          ("M-<down>"  . windmove-down )
+          ("M-<right>" . windmove-right)
+          ("M-<left>"  . windmove-left )
+          ("C-M-r"     . split-window-horizontally-and-switch)
+          ("C-M-d"     . split-window-vertically-and-switch  )))
 
 ;; Whitespace cleaning (trailing whitespaces mostly)
 (use-package ws-butler
