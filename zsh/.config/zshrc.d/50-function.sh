@@ -98,7 +98,7 @@ export-terminfo() {
 # pacdiff is taken by pacman-contrib
 pacfilediff() {
     if [[ $# != 1 || ! -f "$1" ]]; then
-        echo "Diffs a file and it's original version"
+        echo "Shows modifications done to a file since installation"
         echo "Usage: $0 filename"
         return 50
     fi
@@ -112,5 +112,11 @@ pacfilediff() {
     local tarpath=$(realpath "$1")
     tarpath=${tarpath#/}
 
-    tar xOf /var/cache/pacman/pkg/$pkg-$ver-*.pkg.tar.xz "$tarpath" | diff - "$1"
+    local filename=$(echo /var/cache/pacman/pkg/$pkg-$ver-*.pkg.tar.*)
+    if [[ ! -f $filename ]]; then
+        echo "Error: $pkg-$ver not found in pacman's cache"
+        return 52
+    fi
+
+    tar xOf "$filename" "$tarpath" | diff - "$1"
 }
