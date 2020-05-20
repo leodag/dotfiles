@@ -147,15 +147,15 @@
 
 ;;; General setup
 (use-package whitespace
-  :delight global-whitespace-mode
+  :delight whitespace-mode
+  :hook ((prog-mode text-mode) . whitespace-mode)
   :custom-face
   (whitespace-tab ((t (:background "dim gray" :foreground "tan"))))
   :config
   (setq-default indent-tabs-mode nil) ; use spaces instead of tabs
   (setq whitespace-style
         '(face trailing tabs spaces newline empty space-after-tab
-               space-before-tab tab-mark))
-  (global-whitespace-mode))
+               space-before-tab tab-mark)))
 
 ;; Changes tooltip color on Windows
 (use-package tooltip :straight nil
