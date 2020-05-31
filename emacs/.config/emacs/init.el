@@ -1,3 +1,5 @@
+;;; init.el -*- lexical-binding: t -*-
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -14,6 +16,8 @@
 ;; save backups in emacs.d
 (setq backup-directory-alist
       `(("." . ,(concat user-emacs-directory "backups"))))
+(setq auto-save-file-name-transforms
+      `((".*" ,(concat user-emacs-directory "backups/") t)))
 
 ;; remove interface elements
 (menu-bar-mode -1)
@@ -36,8 +40,6 @@
 ;; A value over 100 implies never recentering
 (setq scroll-conservatively 101)
 
-;; TODO: use-package mwheel
-(setq mouse-wheel-progressive-speed nil)
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (defvar monospace-font "Fira Mono"
@@ -150,11 +152,16 @@
 ;; Allows minor mode name manipulation
 (use-package delight :defer t)
 
+(use-package mwheel :straight nil
+  :config
+  (setq mouse-wheel-progressive-speed nil))
+
 ;;; Utilities
 (use-package tramp :defer t :straight nil)
 
 (use-package ag :defer t)
-(use-package ripgrep :defer t)
+(use-package rg
+  :bind ("C-c s" . rg-menu))
 
 (use-package all-the-icons :defer t)
 
