@@ -299,6 +299,9 @@
   :config
   (evil-set-initial-state 'treemacs-mode 'emacs)
 
+  (when (eq system-type 'windows-nt)
+    (setq treemacs-python-executable "python"))
+
   (let ((font (sans-font 9)))
     (set-face-attribute 'treemacs-root-face      nil :font font)
     (set-face-attribute 'treemacs-file-face      nil :font font)
