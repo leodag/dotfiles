@@ -294,6 +294,7 @@
   :after evil
   :commands (treemacs-is-treemacs-window-selected? treemacs-select-window)
   :bind (([f8] . treemacs-select-or-deselect)
+         ("S-<f8>" . treemacs-follow-and-select)
          :map treemacs-mode-map
          ([mouse-1] . treemacs-single-click-expand-action))
   :config
@@ -314,9 +315,9 @@
        nil
        :font font)))
 
-  (setq treemacs-indentation 1)
+  (setq treemacs-indentation 2)
 
-  (treemacs-follow-mode 1)
+  (treemacs-follow-mode -1)
   (treemacs-filewatch-mode 1)
   (treemacs-fringe-indicator-mode 1)
   (treemacs-git-mode
@@ -324,19 +325,21 @@
      ('gnu/linux 'deferred)
      ('windows-nt 'simple))))
 
-(defun treemacs-open-select-or-close ()
-  "Opens treemacs if it is not already open, select if it is visible but not selected, and closes it if it is selected."
-  (interactive)
-  (if (treemacs-is-treemacs-window-selected?)
-      (delete-window (selected-window))
-    (treemacs-select-window)))
-
 (defun treemacs-select-or-deselect ()
   "Opens treemacs if it is not already open, select if it is visible but not selected, and select last selected window if it is selected."
   (interactive)
   (if (treemacs-is-treemacs-window-selected?)
       (select-window (get-mru-window))
     (treemacs-select-window)))
+
+(defun treemacs-follow-and-select ()
+  "Opens treemacs if it is not open, follow current file and select treemacs window."
+  (interactive)
+  (if (treemacs--find-project-for-buffer)
+      (progn
+        (treemacs-find-file)
+        (treemacs-select-window))
+    (user-error "Current file is not in treemacs' workspace")))
 
 ;; Makes buffer names be unique
 (use-package uniquify :straight nil
