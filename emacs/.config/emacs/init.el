@@ -40,17 +40,22 @@
 (setq mouse-wheel-progressive-speed nil)
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+(defvar monospace-font "Fira Mono"
+  "Preffered monospace font")
+(defvar sans-serif-font "Fira Sans"
+  "Preferred sans serif font")
 
-(if (member "Fira Mono" (font-family-list))
-    (setq monospace-font "Fira Mono")
-  (setq monospace-font (face-attribute 'default :family))
-  (message "Fira Mono not installed!"))
+(unless (daemonp)
+  (if (member "Fira Mono" (font-family-list))
+      (setq monospace-font "Fira Mono")
+    (setq monospace-font (face-attribute 'default :family))
+    (message "Fira Mono not installed!"))
 
-;; TODO: better base face?
-(if (member "Fira Sans" (font-family-list))
-    (setq sans-serif-font "Fira Sans")
-  (setq sans-serif-font (face-attribute 'variable-pitch :family))
-  (message "Fira Sans not installed!"))
+  ;; TODO: better base face?
+  (if (member "Fira Sans" (font-family-list))
+      (setq sans-serif-font "Fira Sans")
+    (setq sans-serif-font (face-attribute 'variable-pitch :family))
+    (message "Fira Sans not installed!")))
 
 (defun font-at-size (family pt)
   "Generates a font spec for the desired font at specified size (in points)"
@@ -64,9 +69,17 @@
   "Generates a font spec for the sans serif font at specified size (in points)"
   (font-at-size sans-serif-font pt))
 
-(set-face-attribute 'default nil :font (mono-font 10))
-
 (setq package-manager 'straight)
+
+(custom-set-faces
+ `(default
+    ((t (:font ,(mono-font 10)))))
+ `(fixed-pitch-serif
+   ((t (:font ,(mono-font 10)))))
+ `(variable-pitch
+   ((t (:font ,(sans-font 10)))))
+ `(header-line
+   ((t (:font ,(sans-font 10))))))
 
 (pcase package-manager
   ('straight
