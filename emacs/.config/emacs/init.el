@@ -31,7 +31,6 @@
 
 (when (eq system-type 'windows-nt)
   (setq ring-bell-function 'ignore))
-  ;;(setq visible-bell t))
 
 ;; Disable "You can run the command {} with M-x {}" message
 (setq suggest-key-bindings nil)
@@ -229,13 +228,12 @@
 (use-package which-key
   :delight
   :config
+  ;; TODO: not monospace
+  ;;(add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
+  ;;(add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
+  ;;(add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil)))
+  ;;(add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil))))
   (which-key-mode 1))
-  ; TODO: not monospace
-  ;(add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
-  ;(add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
-  ;(add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil)))
-  ;(add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil))))
-
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer))
 
@@ -260,10 +258,6 @@
 ;; Better I-search with ivy
 (use-package swiper
   :bind ("C-s" . swiper))
-
-;(use-package counsel-tramp) ; tramp interface
-;(use-package docker-tramp)
-;(use-package vagrant-tramp)
 
 ;; Show (current/total) in modeline when searching
 (use-package anzu :defer 1
@@ -368,18 +362,19 @@
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
-  ;;; The following lines are not relevant anymore, but the bug is still
-  ;;; present so they are kept in my init for documentation purposes.
-  ;;; Should report a bug someday.
-  ;; for sime reason, depth-%d faces don't actually inherit base-face,
-  ;; even though it is specified when defined
-  ;(set-face-attribute 'rainbow-delimiters-base-face nil :weight 'bold)
-  ;; workaround for the above
-  ;(dotimes (i 9)
-  ;  (set-face-attribute
-  ;   (intern (format "rainbow-delimiters-depth-%d-face" (1+ i)))
-  ;   nil
-  ;   :weight 'bold))
+
+;;; The following lines are not relevant anymore, but the bug is still
+;;; present so they are kept in my init for documentation purposes.
+;;; Should report a bug someday.
+;; For sime reason, depth-%d faces don't actually inherit base-face,
+;; even though it is specified when defined
+;;(set-face-attribute 'rainbow-delimiters-base-face nil :weight 'bold)
+;; workaround for the above
+;;(dotimes (i 9)
+;;  (set-face-attribute
+;;   (intern (format "rainbow-delimiters-depth-%d-face" (1+ i)))
+;;   nil
+;;   :weight 'bold))
 
 ;; Directional window selection
 (use-package windmove
