@@ -278,13 +278,17 @@
   (projectile-mode 1)
   (setq projectile-project-search-path '("~/proj/"))
   (setq projectile-completion-system 'ivy)
-  (which-key-add-key-based-replacements "C-c p 4" "other-window"
+  (setq projectile-indexing-method 'alien)
+  (which-key-add-key-based-replacements "C-c p"   "projectile"
+                                        "C-c p 4" "other-window"
                                         "C-c p 5" "other-frame"
                                         "C-c p s" "search"
                                         "C-c p x" "execute"))
 
 (use-package counsel-projectile
-  :after projectile)
+  :after (counsel projectile)
+  :config
+  (counsel-projectile-mode 1))
 
 (use-package treemacs :defer 2
   :after evil
