@@ -220,8 +220,10 @@
 
 ;; vi keybindings
 (use-package evil
+  :disabled
   :config
-  (evil-mode 1))
+  (evil-mode 1)
+  (setq evil-default-state 'emacs))
 
 ;; Show key bindings
 (use-package which-key
