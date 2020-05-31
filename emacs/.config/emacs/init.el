@@ -399,6 +399,7 @@
   :config
   (winner-mode 1))
 
+
 ;;; General programming
 (use-package magit
   :bind ("C-x g" . magit-status)
@@ -529,38 +530,57 @@
   :config
   (add-to-list 'company-backends 'company-anaconda))
 
-;;;; SCRATCH
+;; company-jedi
 
+
+;;;; SCRATCH
 (use-package treemacs-magit :after (treemacs magit))
 (use-package treemacs-icons-dired
+  :after (treemacs dired)
   :hook (dired-mode . treemacs-icons-dired-mode))
 
 ;;; C# setup
 (use-package omnisharp
-  :after (flycheck company)
+  :after (flycheck company evil)
   :hook ((csharp-mode . omnisharp-mode)
          (csharp-mode . flycheck-mode))
   :config
   (add-to-list 'company-backends 'company-omnisharp)
   ;(setq omnisharp-debug t)
-  (setq omnisharp-expected-server-version "1.32.18"))
-  ;;(setq omnisharp-server-executable-path
-  ;;      (concat user-emacs-directory "omnisharp/run"))
+  (setq omnisharp-expected-server-version "1.34.14")
+  (setq omnisharp-server-executable-path
+       (concat user-emacs-directory "omnisharp-" omnisharp-expected-server-version "/run")))
 
-(use-package persp-mode)
+;; (use-package js2-mode
+;;   :interpreter "node"
+;;   :mode ("\\.js\\'"
+;;          ("\\.jsx\\'" . js2-jsx-mode)))
 
-(use-package js2-mode
-  :interpreter "node"
-  :mode ("\\.js\\'"
-         ("\\.jsx\\'" . js2-jsx-mode)))
+;; (use-package js2-refactor
+;;   :after which-key
+;;   :hook (js2-mode . js2-refactor-mode)
+;;   :config
+;;   (js2r-add-keybindings-with-prefix "C-c C-m")
+;;   (which-key-add-major-mode-key-based-replacements 'js2-mode
+;;     "C-c C-m 3"     "ternary"
+;;     "C-c C-m a"     "add/arguments"
+;;     "C-c C-m b"     "barf"
+;;     "C-c C-m c"     "contract"
+;;     "C-c C-m d"     "debug"
+;;     "C-c C-m e"     "extract/expand"
+;;     "C-c C-m i"     "inject/introduce/inline"
+;;     "C-c C-m l"     "localize/log"
+;;     "C-c C-m r"     "rename"
+;;     "C-c C-m s"     "split/slurp/string"
+;;     "C-c C-m t"     "toggle"
+;;     "C-c C-m u"     "unwrap"
+;;     "C-c C-m v"     "var"
+;;     "C-c C-m w"     "wrap"))
 
-(use-package js2-refactor
-  :hook (js2-mode . js2-refactor-mode))
-
-(use-package json-mode :defer t)
+;; (use-package json-mode :defer t)
 
 (use-package tern
-  :hook (js2-mode . tern-mode)
+  :hook (js-mode . tern-mode)
   :config
   ;; tern tries to infer bin/tern path from location - doesn't play
   ;; nicely with straight, since it relocates the elisp files.
@@ -569,10 +589,11 @@
           ,(expand-file-name ; needed on Windows to expand ~
             (concat user-emacs-directory "straight/repos/tern/bin/tern")))))
 
-(use-package company-tern
-  :after tern
-  :config
-  (add-to-list 'company-backends 'company-tern))
+;;; deleted repository
+;; (use-package company-tern
+;;   :after tern evil
+;;   :config
+;;   (add-to-list 'company-backends 'company-tern))
 
 ;; js-doc
 ;; json-reformat
@@ -584,3 +605,119 @@
 
 (use-package flycheck-yamllint
   :hook (flycheck-mode . flycheck-yamllint-setup))
+
+;; evil-magit needs transient, but can't find recipe
+;;(use-package transient)
+;;(use-package evil-magit)
+
+(use-package hideshow
+  :delight hs-minor-mode
+  :hook (prog-mode . hs-minor-mode))
+
+(use-package ts-mode :defer t)
+
+(use-package tide
+  :after (ts-mode evil)
+  :hook ((ts-mode . tide-setup)
+         (ts-mode . eldoc-mode)))
+;;(ts-mode . tide-hl-identifier-mode)))
+
+
+;;; Docker setup
+(use-package docker
+  :defer t
+  :commands (docker))
+
+(use-package dockerfile-mode :defer t)
+
+
+;;; Windows-specific config
+(setq w32-pipe-read-delay 0) ; default in emacs 27
+
+
+;;; WIP
+
+;;; select/swap/delete windows with (C-u)* M-o
+(use-package ace-window
+  :bind ("M-o" . ace-window))
+
+;;; Common Lisp setup
+(use-package slime :defer t
+  :config
+  (setq inferior-lisp-program "sbcl"))
+
+(use-package slime-company
+  ;; slime--setup-contribs does (unless (feture-p c)), so we can't require here
+  :no-require
+  :after (slime company)
+  :config
+  (add-to-list 'slime-contribs 'slime-company t)
+  (setq slime-company-completion 'fuzzy
+        slime-company-after-completion 'slime-company-just-one-space))
+
+(use-package tab-bar
+  :bind (("C-S-t" . tab-new-to)
+         ("C-S-w" . tab-close)
+         ([C-next] . tab-next)
+         ([C-prior] . tab-previous)
+         ([C-S-next] . tab-move)
+         ([C-S-prior] . tab-move-prev))
+  :config
+  (defun tab-move-prev (&optional arg)
+    "Move the current tab ARG positions to the left.
+If a negative ARG, move the current tab ARG positions to the right.
+You should use tab-move for that instead, though."
+    (interactive "p")
+    (tab-move (- arg)))
+
+  (setf tab-bar-close-button-show nil
+        tab-bar-new-button-show nil
+        tab-bar-button-relief 0
+        tab-bar-button-margin 4
+        tab-bar-tab-hints nil
+        tab-bar-tab-name-function 'tab-bar-tab-name-current
+        ;;tab-bar-tab-name-function 'tab-pad-bar
+        tab-bar-border 'border-width
+        tab-bar-show 1
+        tab-bar-tab-max-width 300
+        tab-bar-tab-min-width 20
+        tab-bar-separator nil
+        tab-bar-close-tab-select 'left
+        tab-bar-new-tab-to 'rightmost)
+  (custom-set-faces
+   `(tab-bar
+     ((t (:inherit default))))
+   `(tab-bar-tab
+     ((t (:box nil))))))
+
+(use-package tab-pad
+  :straight (:host github :repo "leodag/tab-pad")
+  :config
+  (tab-pad-bar-mode))
+
+;; uses a strike-through face for ^L
+(use-package form-feed
+  :straight (:host github :repo "leodag/form-feed")
+  :delight
+  :config
+  (global-form-feed-mode))
+
+(use-package projectile-header-line
+  :straight (:host github :repo "leodag/projectile-header-line")
+  :config
+  (global-projectile-header-line-mode))
+
+(use-package prettier-js :defer t
+  :commands (prettier-js))
+
+(use-package multiple-cursors
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C->" . mc/markz-next-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
+
+(use-package explain-pause-mode
+  :disabled ; causes weird delays
+  :straight (:host github :repo "lastquestion/explain-pause-mode")
+  :config
+  (explain-pause-mode 1))
