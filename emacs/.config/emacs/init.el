@@ -39,7 +39,12 @@
 ;; Small indicator on lines that don't exist at the end of the file
 (setq-default indicate-empty-lines t)
 
+;; Lower underline, plays nicely with solarized's modeline
+(setq x-underline-at-descent-line t)
+
+;; Truncate only if window is narrow
 (setq-default truncate-lines nil)
+(setq truncate-partial-width-windows 140)
 
 ;; Amount of lines to keep above/below point
 (setq scroll-margin 5)
