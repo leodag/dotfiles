@@ -445,6 +445,15 @@
   (setq company-idle-delay 1.5)
   (global-company-mode))
 
+(use-package pos-tip
+  :config
+  (setq pos-tip-border-width 0)) ; border renders only on top/left when set
+
+(use-package company-quickhelp
+  :after company
+  :config
+  (company-quickhelp-mode 1))
+
 ;;; Rust setup
 (use-package toml-mode :defer t)
 
