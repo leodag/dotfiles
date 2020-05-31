@@ -410,9 +410,6 @@
   :config
   (setq magit-completing-read-function 'ivy-completing-read))
 
-;; evil-magit needs transient, but can't find recipe
-;(use-package transient)
-;(use-package evil-magit)
 
 (use-package flycheck :defer nil
   :after (which-key evil)
