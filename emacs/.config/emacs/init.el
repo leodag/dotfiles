@@ -393,7 +393,7 @@
 
 ;; Creates matching closing delimiter
 (use-package elec-pair
-  :hook (prog-mode . electric-pair-mode))
+  :hook ((emacs-lisp-mode lisp-mode) . electric-pair-local-mode))
 
 ;; Buffer layout history (C-c <left>/<right>)
 (use-package winner
