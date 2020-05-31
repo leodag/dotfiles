@@ -197,18 +197,11 @@
    `(tooltip
      ((t (:background "white" :foreground "black" :font ,(sans-font 10)))))))
 
-;; Maybe a better way?
-(if (not (version<= emacs-version "26.0"))
-    (use-package display-line-numbers
-      :hook ((prog-mode text-mode) . display-line-numbers-mode)
-      :config
-      (setq display-line-numbers-type 'relative)
-      (setq display-line-numbers-grow-only t))
-  (use-package nlinum-relative
-    :hook ((prog-mode text-mode) . nlinum-relative-mode)
-    :config
-    (setq nlinum-relative-redisplay-delay 0)
-    (nlinum-relative-setup-evil)))
+(use-package display-line-numbers
+  :hook ((prog-mode text-mode) . display-line-numbers-mode)
+  :config
+  (setq display-line-numbers-type 'relative)
+  (setq display-line-numbers-grow-only t))
 
 (use-package eldoc
   :delight)
