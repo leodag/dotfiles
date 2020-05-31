@@ -361,12 +361,16 @@
 (use-package paren
   :hook (prog-mode . show-paren-mode)
   :custom-face
-  (show-paren-match ((t (:foreground "black")))))
+  (show-paren-match ((t (:foreground "black"))))
+  :config
+  (setq show-paren-delay 0
+        show-paren-highlight-openparen t))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
   ;;; The following lines are not relevant anymore, but the bug is still
   ;;; present so they are kept in my init for documentation purposes.
+  ;;; Should report a bug someday.
   ;; for sime reason, depth-%d faces don't actually inherit base-face,
   ;; even though it is specified when defined
   ;(set-face-attribute 'rainbow-delimiters-base-face nil :weight 'bold)
