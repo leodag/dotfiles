@@ -213,12 +213,6 @@
 (use-package eldoc
   :delight)
 
-;; Command interaction mode
-(use-package comint :straight nil
-  :bind (:map comint-mode-map
-              ([up] . comint-previous-input)
-              ([down] . comint-next-input)))
-
 ;; Auto-reload modified files; warn on overlapping changes
 (use-package autorevert
   :delight auto-revert-mode
