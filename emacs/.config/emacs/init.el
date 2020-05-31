@@ -436,12 +436,14 @@
                  (reusable-frames . visible)
                  (window-height   . 12))))
 
-(use-package company
+(use-package company :defer nil
   :delight
-  :hook (prog-mode . company-mode)
   :bind* ("C-<tab>" . company-complete-common-or-cycle)
+  :bind (:map company-active-map
+              ("M-." . company-show-location))
   :config
-  (setq company-idle-delay 1.5))
+  (setq company-idle-delay 1.5)
+  (global-company-mode))
 
 ;;; Rust setup
 (use-package toml-mode :defer t)
