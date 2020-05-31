@@ -502,11 +502,13 @@
   :disabled
   :hook (irony-mode . irony-eldoc))
 
-(use-package company-irony :after irony
+(use-package company-irony
+  :after irony
   :config
   (add-to-list 'company-backends 'company-irony))
 
-(use-package company-irony-c-headers :after irony
+(use-package company-irony-c-headers
+  :after irony
   :config
   (add-to-list 'company-backends 'company-irony-c-headers))
 
@@ -526,11 +528,7 @@
   (add-to-list 'company-backends 'company-anaconda))
 
 ;;;; SCRATCH
-;; wasn't working before - idk why works now
-(use-package treemacs-projectile
-  :bind (([M-f8] . treemacs-projectile)))
 
-(use-package treemacs-evil :after treemacs)
 (use-package treemacs-magit :after (treemacs magit))
 (use-package treemacs-icons-dired
   :hook (dired-mode . treemacs-icons-dired-mode))
