@@ -210,6 +210,8 @@
     (setq nlinum-relative-redisplay-delay 0)
     (nlinum-relative-setup-evil)))
 
+(use-package eldoc
+  :delight)
 
 ;; Command interaction mode
 (use-package comint :straight nil
