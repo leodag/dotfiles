@@ -241,6 +241,9 @@
   ;(add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil)))
   ;(add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil))))
 
+(use-package ibuffer
+  :bind ("C-x C-b" . ibuffer))
+
 (use-package ivy
   :delight
   :config
@@ -265,19 +268,6 @@
 ;(use-package docker-tramp)
 ;(use-package vagrant-tramp)
 
-(use-package helm
-  :bind (("C-x C-b" . helm-mini)
-         ("C-x C-f" . helm-find-files))
-  :config
-  (helm-autoresize-mode 1)
-  ;(setq helm-split-window-inside-p t) ; only split current buffer
-  (setq helm-full-frame t)
-  (setq helm-autoresize-min-height 25)
-  (setq helm-autoresize-max-height 35))
-
-; Complete with helm
-(use-package helm-company
-  :bind* ("C-:" . helm-company))
 
 (use-package projectile
   :after which-key
