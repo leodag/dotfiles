@@ -270,6 +270,11 @@
 ;(use-package docker-tramp)
 ;(use-package vagrant-tramp)
 
+;; Show (current/total) in modeline when searching
+(use-package anzu :defer 1
+  :delight
+  :config
+  (global-anzu-mode))
 
 (use-package projectile
   :after which-key
