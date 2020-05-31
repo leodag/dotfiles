@@ -71,8 +71,6 @@
   "Generates a font spec for the sans serif font at specified size (in points)"
   (font-at-size sans-serif-font pt))
 
-(setq package-manager 'straight)
-
 (custom-set-faces
  `(default
     ((t (:font ,(mono-font 10)))))
@@ -83,6 +81,10 @@
  `(header-line
    ((t (:font ,(sans-font 10))))))
 
+(defvar package-manager 'straight
+  "Package manager to be used by use-package")
+
+;; TODO: finish package.el
 (pcase package-manager
   ('straight
    ;; Straight bootstrapping and configuration
@@ -100,6 +102,7 @@
    (straight-use-package 'use-package)
    (setq straight-use-package-by-default t))
 
+  ;; not really working well
   ('package
    (require 'package)
    (setq package-enable-at-startup nil)
@@ -130,7 +133,7 @@
 
 (defun set-frame-alpha (value)
   "Set the transparency of the frame. 0 = transparent/100 = opaque"
-  (interactive "nAlpha value (0-100): ")
+  (interactive "nAlpha value (0-100=opaque): ")
   (set-frame-parameter (selected-frame) 'alpha value))
 
 (defun edit-init ()
@@ -210,7 +213,7 @@
               ([up] . comint-previous-input)
               ([down] . comint-next-input)))
 
-;; Auto-reload modified files; warn on changes file
+;; Auto-reload modified files; warn on overlapping changes
 (use-package autorevert
   :delight auto-revert-mode
   :config
@@ -242,9 +245,7 @@
   :delight
   :config
   (ivy-mode 1)
-  ;; Display (current/total) instead of just total
   (setq ivy-count-format "(%d/%d) ")
-  ;; Highlight the entire line
   (setq ivy-format-function 'ivy-format-function-line)
   (setq ivy-use-selectable-prompt t))
 
@@ -256,7 +257,7 @@
   :config
   (counsel-mode 1))
 
-; Better I-search with ivy
+;; Better I-search with ivy
 (use-package swiper
   :bind ("C-s" . swiper))
 
@@ -351,6 +352,7 @@
   (hl-paren-face ((t (:weight bold))))
   :config
   ;; only highlights as many levels of parens as the length of this list
+  ;; nil makes the face be applied, but color unaltered
   (setq hl-paren-colors '(nil nil nil nil nil nil nil nil)))
 
 ;; Highlight matching paren
@@ -373,14 +375,14 @@
   ;   nil
   ;   :weight 'bold))
 
-; Directional window selection
+;; Directional window selection
 (use-package windmove
-  :bind* (("M-<up>"    . windmove-up   )
-          ("M-<down>"  . windmove-down )
+  :bind* (("M-<up>" . windmove-up)
+          ("M-<down>" . windmove-down)
           ("M-<right>" . windmove-right)
-          ("M-<left>"  . windmove-left )
-          ("C-M-r"     . split-window-horizontally-and-switch)
-          ("C-M-d"     . split-window-vertically-and-switch  )))
+          ("M-<left>" . windmove-left)
+          ("C-M-r" . split-window-horizontally-and-switch)
+          ("C-M-d" . split-window-vertically-and-switch)))
 
 ;; Whitespace cleaning (trailing whitespaces mostly)
 (use-package ws-butler
@@ -544,7 +546,7 @@
 (use-package tern
   :hook (js2-mode . tern-mode)
   :config
-  ;; tern tries to infer bin/tern path from  location - doesn't play
+  ;; tern tries to infer bin/tern path from location - doesn't play
   ;; nicely with straight, since it relocates the elisp files.
   (setq tern-command
         `("node"
