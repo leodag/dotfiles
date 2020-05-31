@@ -25,6 +25,14 @@
 (tool-bar-mode -1)
 (blink-cursor-mode -1)
 (setq inhibit-startup-screen t)
+
+;; Use LF even on Windows
+(prefer-coding-system 'utf-8-unix)
+
+(when (eq system-type 'windows-nt)
+  (setq ring-bell-function 'ignore))
+  ;;(setq visible-bell t))
+
 ;; Disable "You can run the command {} with M-x {}" message
 (setq suggest-key-bindings nil)
 
@@ -32,8 +40,6 @@
 (setq-default indicate-empty-lines t)
 
 (setq-default truncate-lines nil)
-
-(setq ring-bell-function 'ignore)
 
 ;; Amount of lines to keep above/below point
 (setq scroll-margin 5)
