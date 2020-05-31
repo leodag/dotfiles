@@ -249,12 +249,14 @@
   :config
   (ivy-mode 1)
   (setq ivy-count-format "(%d/%d) ")
-  (setq ivy-format-function 'ivy-format-function-line)
+  (setf (alist-get t ivy-format-functions-alist) 'ivy-format-function-default)
   (setq ivy-use-selectable-prompt t))
 
 (use-package ivy-hydra :after ivy)
 
 (use-package counsel
+  :defer nil
+  :after ivy
   :delight
   :bind ("M-X" . set-variable)
   :config
