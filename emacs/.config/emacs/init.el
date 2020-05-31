@@ -405,6 +405,13 @@
   :config
   (setq magit-completing-read-function 'ivy-completing-read))
 
+(use-package diff-hl
+  :config
+  (diff-hl-margin-mode 1)
+  (diff-hl-flydiff-mode 1)
+  (diff-hl-dired-mode 1)
+  (global-diff-hl-mode 1)
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
 (use-package flycheck :defer nil
   :after (which-key evil)
