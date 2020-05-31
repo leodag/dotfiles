@@ -46,8 +46,8 @@
 ;; A value over 100 implies never recentering
 (setq scroll-conservatively 101)
 
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
 (defvar monospace-font "Fira Mono"
   "Preffered monospace font")
 (defvar sans-serif-font "Fira Sans"
