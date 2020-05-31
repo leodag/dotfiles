@@ -454,6 +454,8 @@
   :config
   (company-quickhelp-mode 1))
 
+(use-package org :defer t)
+
 ;;; Rust setup
 (use-package toml-mode :defer t)
 
