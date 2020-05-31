@@ -413,7 +413,7 @@
   (global-diff-hl-mode 1)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
-(use-package flycheck :defer nil
+(use-package flycheck :defer 1
   :after (which-key evil)
   :bind (:map flycheck-error-list-mode-map
               ("k" . flycheck-error-list-previous-error)
