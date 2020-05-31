@@ -210,12 +210,6 @@
     (setq nlinum-relative-redisplay-delay 0)
     (nlinum-relative-setup-evil)))
 
-;; Highlight current line
-(use-package hl-line
-  :config
-  ;; Don't highlight a window's line on other windows on that buffer
-  (setq global-hl-line-sticky-flag nil)
-  (global-hl-line-mode 1))
 
 ;; Command interaction mode
 (use-package comint :straight nil
