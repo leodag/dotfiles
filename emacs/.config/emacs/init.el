@@ -2,6 +2,7 @@
 
 
 ;;; Custom
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -465,6 +466,7 @@ window."
 
 
 ;;; General programming
+
 (use-package magit
   :bind ("C-x g" . magit-status)
   :config
@@ -540,6 +542,7 @@ window."
 
 
 ;;; Common Lisp setup
+
 (use-package slime :defer t
   :config
   (setq inferior-lisp-program "sbcl"))
@@ -555,6 +558,7 @@ window."
 
 
 ;;; Rust setup
+
 (use-package toml-mode :defer t)
 
 (use-package rust-mode :defer t)
@@ -571,6 +575,7 @@ window."
 
 
 ;;; Elixir setup
+
 (use-package alchemist
   :after (elixir-mode which-key)
   :config
@@ -591,10 +596,12 @@ window."
 
 
 ;;; Clojure setup
+
 (use-package cider :after clojure-mode)
 
 
 ;;; C++ setup
+
 (use-package irony
   :hook ((c-mode    . irony-mode)
          (c++-mode  . irony-mode)
@@ -622,6 +629,7 @@ window."
 
 
 ;;; C# setup
+
 (use-package omnisharp
   :after (flycheck company)
   :hook ((csharp-mode . omnisharp-mode)
@@ -635,6 +643,7 @@ window."
 
 
 ;;; Python setup
+
 (use-package anaconda-mode
   :hook ((python-mode . anaconda-mode)
          (python-mode . anaconda-eldoc-mode)))
