@@ -521,7 +521,7 @@ window."
   :config
   (company-quickhelp-mode 1))
 
-(use-package org :defer t)
+;;(use-package org :defer t)
 
 
 ;;; Docker setup
@@ -628,9 +628,9 @@ window."
          (csharp-mode . flycheck-mode))
   :config
   (add-to-list 'company-backends 'company-omnisharp)
-  (setq omnisharp-expected-server-version "1.34.14"
-        ;;omnisharp-debug t
-        omnisharp-server-executable-path
+  (setq omnisharp-expected-server-version "1.35.2")
+  ;; (setq omnisharp-debug t)
+  (setq omnisharp-server-executable-path
         (concat user-emacs-directory "omnisharp-" omnisharp-expected-server-version "/run")))
 
 
