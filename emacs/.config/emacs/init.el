@@ -1,5 +1,7 @@
 ;;; init.el -*- lexical-binding: t -*-
 
+
+;;; Custom
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -13,44 +15,37 @@
  ;; If there is more than one, they won't work right.
  )
 
+
+;;; General initial setup
+
 ;; save backups in emacs.d
 (setq backup-directory-alist
-      `(("." . ,(concat user-emacs-directory "backups"))))
-(setq auto-save-file-name-transforms
+      `(("." . ,(concat user-emacs-directory "backups")))
+      auto-save-file-name-transforms
       `((".*" ,(concat user-emacs-directory "backups/") t)))
 
-;; remove interface elements
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
 (blink-cursor-mode -1)
-(setq inhibit-startup-screen t)
 
-;; Use LF even on Windows
+;; Disable "You can run the command {} with M-x {}" message
+(setq suggest-key-bindings nil
+      inhibit-startup-screen t)
+
+;; Amount of lines to keep above/below point
+(setq scroll-margin 5
+      ;; A value over 100 implies never recentering
+      scroll-conservatively 101)
+
+
+;;; Windows
+
 (prefer-coding-system 'utf-8-unix)
 
 (when (eq system-type 'windows-nt)
-  (setq ring-bell-function 'ignore))
+  (setq w32-pipe-read-delay 0 ; default in emacs 27
+        ring-bell-function 'ignore))
 
-;; Disable "You can run the command {} with M-x {}" message
-(setq suggest-key-bindings nil)
-
-;; Small indicator on lines that don't exist at the end of the file
-(setq-default indicate-empty-lines t)
-
-;; Lower underline, plays nicely with solarized's modeline
-(setq x-underline-at-descent-line t)
-
-;; Truncate only if window is narrow
-(setq-default truncate-lines nil)
-(setq truncate-partial-width-windows 140)
-
-;; Amount of lines to keep above/below point
-(setq scroll-margin 5)
-;; A value over 100 implies never recentering
-(setq scroll-conservatively 101)
-
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;;; Fonts
 
 (defvar monospace-font "Fira Mono"
   "Preffered monospace font")
@@ -91,6 +86,9 @@
  `(header-line
    ((t (:font ,(sans-font 10))))))
 
+
+;;; Package management setup
+
 (defvar package-manager 'straight
   "Package manager to be used by use-package")
 
@@ -128,7 +126,9 @@
 
 (setq use-package-compute-statistics t)
 
-;; Utility functions
+
+;;; Utility functions
+
 (defun split-window-vertically-and-switch ()
   "After splitting the window, also switch to it."
   (interactive)
@@ -154,21 +154,31 @@
 (defun reload-init ()
   "Reload init.el"
   (interactive)
-  (load-file "~/.emacs.d/init.el"))
+  (load-file (find-lisp-object-file-name 'edit-init nil)))
 
-;; Themes
+
+;;; Theming
+
+;; Lower underline, plays nicely with solarized's modeline
+(setq x-underline-at-descent-line t)
+
+;; Small indicator on lines that don't exist at the end of the file
+(setq-default indicate-empty-lines t)
+
+;; Truncate only if window is narrow
+(setq-default truncate-lines nil)
+(setq truncate-partial-width-windows 140)
+
 (use-package solarized-theme
   :config
   (load-theme 'solarized-light t))
 
-;; Allows minor mode name manipulation
+;; Allows minor mode indicator manipulation
 (use-package delight :defer t)
 
-(use-package mwheel :straight nil
-  :config
-  (setq mouse-wheel-progressive-speed nil))
-
+
 ;;; Utilities
+
 (use-package tramp :defer t :straight nil)
 
 (use-package ag :defer t)
@@ -177,7 +187,9 @@
 
 (use-package all-the-icons :defer t)
 
+
 ;;; General setup
+
 (use-package whitespace
   :delight whitespace-mode
   :hook ((prog-mode text-mode) . whitespace-mode)
@@ -189,6 +201,13 @@
         '(face trailing tabs spaces newline empty space-after-tab
                space-before-tab tab-mark)))
 
+;; uses a strike-through face for ^L
+(use-package form-feed
+  :straight (:host github :repo "leodag/form-feed")
+  :delight
+  :config
+  (global-form-feed-mode))
+
 ;; Changes tooltip color on Windows
 (use-package tooltip :straight nil
   :config
@@ -196,103 +215,71 @@
    `(tooltip
      ((t (:background "white" :foreground "black" :font ,(sans-font 10)))))))
 
+(use-package tab-bar
+  :bind (("C-S-t" . tab-new-to)
+         ("C-S-w" . tab-close)
+         ([C-next] . tab-next)
+         ([C-prior] . tab-previous)
+         ([C-S-next] . tab-move)
+         ([C-S-prior] . tab-move-prev))
+  :config
+  (defun tab-move-prev (&optional arg)
+    "Move the current tab ARG positions to the left.
+If a negative ARG, move the current tab ARG positions to the right.
+You should use tab-move for that instead, though."
+    (interactive "p")
+    (tab-move (- arg)))
+
+  (setf tab-bar-close-button-show nil
+        tab-bar-new-button-show nil
+        tab-bar-show 1
+        tab-bar-close-tab-select 'left
+        tab-bar-new-tab-to 'rightmost)
+  (custom-set-faces
+   `(tab-bar
+     ((t (:inherit default))))
+   `(tab-bar-tab
+     ((t (:box nil))))))
+
+(use-package tab-pad
+  :straight (:host github :repo "leodag/tab-pad")
+  :config
+  (tab-pad-bar-mode))
+
 (use-package display-line-numbers
   :hook ((prog-mode text-mode) . display-line-numbers-mode)
   :config
-  (setq display-line-numbers-type 'relative)
-  (setq display-line-numbers-grow-only t))
+  (setq display-line-numbers-type 'relative
+        display-line-numbers-grow-only t))
 
-(use-package eldoc
-  :delight)
-
-;; Auto-reload modified files; warn on overlapping changes
-(use-package autorevert
-  :delight auto-revert-mode
+;; Buffer layout history (C-c <left>/<right>)
+(use-package winner
   :config
-  (global-auto-revert-mode))
-
-;; Show undo history in a tree
-(use-package undo-tree
-  :delight
-  :config
-  (global-undo-tree-mode))
-
-;; vi keybindings
-(use-package evil
-  :disabled
-  :config
-  (evil-mode 1)
-  (setq evil-default-state 'emacs))
-
-;; Show key bindings
-(use-package which-key
-  :delight
-  :config
-  ;; TODO: not monospace
-  ;;(add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
-  ;;(add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
-  ;;(add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil)))
-  ;;(add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil))))
-  (which-key-mode 1))
-(use-package ibuffer
-  :bind ("C-x C-b" . ibuffer))
-
-(use-package ivy
-  :delight
-  :config
-  (ivy-mode 1)
-  (setq ivy-count-format "(%d/%d) ")
-  (setf (alist-get t ivy-format-functions-alist) 'ivy-format-function-default)
-  (setq ivy-use-selectable-prompt t))
-
-(use-package ivy-hydra :after ivy)
-
-(use-package counsel
-  :defer nil
-  :after ivy
-  :delight
-  :bind ("M-X" . set-variable)
-  :config
-  (counsel-mode 1))
-
-;; Better I-search with ivy
-(use-package swiper
-  :bind ("C-s" . swiper))
-
-;; Show (current/total) in modeline when searching
-(use-package anzu :defer 1
-  :delight
-  :config
-  (global-anzu-mode))
-
-(use-package projectile
-  :after which-key
-  :bind-keymap* ("C-c p" . projectile-command-map)
-  :config
-  (projectile-mode 1)
-  (setq projectile-project-search-path '("~/proj/"))
-  (setq projectile-completion-system 'ivy)
-  (setq projectile-indexing-method 'alien)
-  (which-key-add-key-based-replacements "C-c p"   "projectile"
-                                        "C-c p 4" "other-window"
-                                        "C-c p 5" "other-frame"
-                                        "C-c p s" "search"
-                                        "C-c p x" "execute"))
-
-(use-package counsel-projectile
-  :after (counsel projectile)
-  :config
-  (counsel-projectile-mode 1))
+  (winner-mode 1))
 
 (use-package treemacs :defer 2
-  :after evil
-  :commands (treemacs-is-treemacs-window-selected? treemacs-select-window)
-  :bind (([f8] . treemacs-select-or-deselect)
+  :bind (("<f8>" . treemacs-select-or-deselect)
          ("S-<f8>" . treemacs-follow-and-select)
          :map treemacs-mode-map
          ([mouse-1] . treemacs-single-click-expand-action))
   :config
-  (evil-set-initial-state 'treemacs-mode 'emacs)
+  (defun treemacs-select-or-deselect ()
+    "Opens treemacs if it is not already open, select if it is visible but not
+selected, and select last selected window if it is selected."
+    (interactive)
+    (if (treemacs-is-treemacs-window-selected?)
+        (select-window (get-mru-window))
+      (treemacs-select-window)))
+
+  (defun treemacs-follow-and-select ()
+    "Opens treemacs if it is not open, follow current file and select treemacs
+window."
+    (interactive)
+    (if (treemacs--find-project-for-buffer)
+        (progn
+          (treemacs-find-file)
+          (treemacs-select-window))
+      (user-error "Current file is not in treemacs' workspace")))
 
   (when (eq system-type 'windows-nt)
     (setq treemacs-python-executable "python"))
@@ -319,26 +306,108 @@
      ('gnu/linux 'deferred)
      ('windows-nt 'simple))))
 
-(defun treemacs-select-or-deselect ()
-  "Opens treemacs if it is not already open, select if it is visible but not selected, and select last selected window if it is selected."
-  (interactive)
-  (if (treemacs-is-treemacs-window-selected?)
-      (select-window (get-mru-window))
-    (treemacs-select-window)))
+;; Auto-reload modified files; warn on overlapping changes
+(use-package autorevert
+  :delight auto-revert-mode
+  :config
+  (global-auto-revert-mode))
 
-(defun treemacs-follow-and-select ()
-  "Opens treemacs if it is not open, follow current file and select treemacs window."
-  (interactive)
-  (if (treemacs--find-project-for-buffer)
-      (progn
-        (treemacs-find-file)
-        (treemacs-select-window))
-    (user-error "Current file is not in treemacs' workspace")))
+;; Show undo history in a tree
+(use-package undo-tree
+  :delight
+  :config
+  (global-undo-tree-mode))
+
+(use-package mwheel :straight nil
+  :config
+  (setq mouse-wheel-progressive-speed nil))
+
+;; vi keybindings
+(use-package evil
+  :disabled
+  :config
+  (evil-mode 1)
+  (setq evil-default-state 'emacs))
+
+;; Show key bindings
+(use-package which-key
+  :delight
+  :config
+  ;; TODO: not monospace
+  ;;(add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
+  ;;(add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
+  ;;(add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil)))
+  ;;(add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil))))
+  (which-key-mode 1))
+
+(use-package ibuffer
+  :bind ("C-x C-b" . ibuffer))
+
+;;; select/swap/delete windows with (C-u)* M-o
+(use-package ace-window
+  :bind ("M-o" . ace-window))
+
+(use-package ivy
+  :delight
+  :config
+  (ivy-mode 1)
+  (setq ivy-count-format "(%d/%d) "
+        ivy-use-selectable-prompt t)
+  (setf (alist-get t ivy-format-functions-alist) 'ivy-format-function-default))
+
+(use-package ivy-hydra :after ivy)
+
+(use-package counsel
+  :defer nil
+  :after ivy
+  :delight
+  :bind ("M-X" . set-variable)
+  :config
+  (counsel-mode 1))
+
+;; Better I-search with ivy
+(use-package swiper
+  :bind ("C-s" . swiper))
+
+;; Show (current/total) in modeline when searching
+(use-package anzu :defer 1
+  :delight
+  :config
+  (global-anzu-mode))
+
+(use-package projectile
+  :after which-key
+  :bind-keymap* ("C-c p" . projectile-command-map)
+  :config
+  (projectile-mode 1)
+  (setq projectile-project-search-path '("~/proj/")
+        projectile-completion-system 'ivy
+        projectile-indexing-method 'alien)
+  (which-key-add-key-based-replacements
+    "C-c p"   "projectile"
+    "C-c p 4" "other-window"
+    "C-c p 5" "other-frame"
+    "C-c p s" "search"
+    "C-c p x" "execute"))
+
+(use-package projectile-header-line
+  :straight (:host github :repo "leodag/projectile-header-line")
+  :config
+  (global-projectile-header-line-mode))
+
+(use-package counsel-projectile
+  :after (counsel projectile)
+  :config
+  (counsel-projectile-mode 1))
 
 ;; Makes buffer names be unique
 (use-package uniquify :straight nil
   :config
   (setq uniquify-buffer-name-style 'forward))
+
+(use-package hideshow
+  :delight hs-minor-mode
+  :hook (prog-mode . hs-minor-mode))
 
 ;; Highlights parentheses enclosing point
 (use-package highlight-parentheses
@@ -394,11 +463,6 @@
 (use-package elec-pair
   :hook ((emacs-lisp-mode lisp-mode) . electric-pair-local-mode))
 
-;; Buffer layout history (C-c <left>/<right>)
-(use-package winner
-  :config
-  (winner-mode 1))
-
 
 ;;; General programming
 (use-package magit
@@ -415,7 +479,7 @@
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
 (use-package flycheck :defer 1
-  :after (which-key evil)
+  :after which-key
   :bind (:map flycheck-error-list-mode-map
               ("k" . flycheck-error-list-previous-error)
               ("j" . flycheck-error-list-next-error))
@@ -423,7 +487,6 @@
   :config
   (global-flycheck-mode)
   (which-key-add-key-based-replacements "C-c !" "flycheck")
-  (evil-set-initial-state 'flycheck-error-list-mode 'emacs)
   ;; Remove annoying init.el warning
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
   ;; TODO: make this work and exclude yamllint-document-start in yamllint's use
@@ -436,6 +499,9 @@
                  (side            . bottom)
                  (reusable-frames . visible)
                  (window-height   . 12))))
+
+(use-package eldoc
+  :delight)
 
 (use-package company :defer nil
   :delight
@@ -457,6 +523,37 @@
 
 (use-package org :defer t)
 
+
+;;; Docker setup
+
+(use-package docker
+  :defer t
+  :commands (docker))
+
+(use-package dockerfile-mode :defer t)
+
+;;; YAML setup
+(use-package yaml-mode :defer t)
+
+(use-package flycheck-yamllint
+  :hook (flycheck-mode . flycheck-yamllint-setup))
+
+
+;;; Common Lisp setup
+(use-package slime :defer t
+  :config
+  (setq inferior-lisp-program "sbcl"))
+
+(use-package slime-company
+  ;; slime--setup-contribs does (unless (feture-p c)), so we can't require here
+  :no-require
+  :after (slime company)
+  :config
+  (add-to-list 'slime-contribs 'slime-company t)
+  (setq slime-company-completion 'fuzzy
+        slime-company-after-completion 'slime-company-just-one-space))
+
+
 ;;; Rust setup
 (use-package toml-mode :defer t)
 
@@ -472,6 +569,7 @@
   :hook ((rust-mode . racer-mode)
          (racer-mode . eldoc-mode)))
 
+
 ;;; Elixir setup
 (use-package alchemist
   :after (elixir-mode which-key)
@@ -491,9 +589,11 @@
     "C-c a o"   "macroexpand"
     "C-c a f"   "info"))
 
+
 ;;; Clojure setup
 (use-package cider :after clojure-mode)
 
+
 ;;; C++ setup
 (use-package irony
   :hook ((c-mode    . irony-mode)
@@ -520,6 +620,20 @@
   :disabled
   :hook (flycheck-mode . flycheck-irony-setup))
 
+
+;;; C# setup
+(use-package omnisharp
+  :after (flycheck company)
+  :hook ((csharp-mode . omnisharp-mode)
+         (csharp-mode . flycheck-mode))
+  :config
+  (add-to-list 'company-backends 'company-omnisharp)
+  (setq omnisharp-expected-server-version "1.34.14"
+        ;;omnisharp-debug t
+        omnisharp-server-executable-path
+        (concat user-emacs-directory "omnisharp-" omnisharp-expected-server-version "/run")))
+
+
 ;;; Python setup
 (use-package anaconda-mode
   :hook ((python-mode . anaconda-mode)
@@ -533,24 +647,7 @@
 ;; company-jedi
 
 
-;;;; SCRATCH
-(use-package treemacs-magit :after (treemacs magit))
-(use-package treemacs-icons-dired
-  :after (treemacs dired)
-  :hook (dired-mode . treemacs-icons-dired-mode))
-
-;;; C# setup
-(use-package omnisharp
-  :after (flycheck company evil)
-  :hook ((csharp-mode . omnisharp-mode)
-         (csharp-mode . flycheck-mode))
-  :config
-  (add-to-list 'company-backends 'company-omnisharp)
-  ;(setq omnisharp-debug t)
-  (setq omnisharp-expected-server-version "1.34.14")
-  (setq omnisharp-server-executable-path
-       (concat user-emacs-directory "omnisharp-" omnisharp-expected-server-version "/run")))
-
+;;; JavaScript/TypeScript setup
 ;; (use-package js2-mode
 ;;   :interpreter "node"
 ;;   :mode ("\\.js\\'"
@@ -577,7 +674,8 @@
 ;;     "C-c C-m v"     "var"
 ;;     "C-c C-m w"     "wrap"))
 
-;; (use-package json-mode :defer t)
+(use-package prettier-js :defer t
+  :commands (prettier-js))
 
 (use-package tern
   :hook (js-mode . tern-mode)
@@ -591,7 +689,7 @@
 
 ;;; deleted repository
 ;; (use-package company-tern
-;;   :after tern evil
+;;   :after tern
 ;;   :config
 ;;   (add-to-list 'company-backends 'company-tern))
 
@@ -601,114 +699,16 @@
 ;; flymake-json
 ;; eslint
 
-(use-package yaml-mode :defer t)
-
-(use-package flycheck-yamllint
-  :hook (flycheck-mode . flycheck-yamllint-setup))
-
-;; evil-magit needs transient, but can't find recipe
-;;(use-package transient)
-;;(use-package evil-magit)
-
-(use-package hideshow
-  :delight hs-minor-mode
-  :hook (prog-mode . hs-minor-mode))
-
 (use-package ts-mode :defer t)
 
 (use-package tide
-  :after (ts-mode evil)
+  :after ts-mode
   :hook ((ts-mode . tide-setup)
          (ts-mode . eldoc-mode)))
 ;;(ts-mode . tide-hl-identifier-mode)))
 
 
-;;; Docker setup
-(use-package docker
-  :defer t
-  :commands (docker))
-
-(use-package dockerfile-mode :defer t)
-
-
-;;; Windows-specific config
-(setq w32-pipe-read-delay 0) ; default in emacs 27
-
-
-;;; WIP
-
-;;; select/swap/delete windows with (C-u)* M-o
-(use-package ace-window
-  :bind ("M-o" . ace-window))
-
-;;; Common Lisp setup
-(use-package slime :defer t
-  :config
-  (setq inferior-lisp-program "sbcl"))
-
-(use-package slime-company
-  ;; slime--setup-contribs does (unless (feture-p c)), so we can't require here
-  :no-require
-  :after (slime company)
-  :config
-  (add-to-list 'slime-contribs 'slime-company t)
-  (setq slime-company-completion 'fuzzy
-        slime-company-after-completion 'slime-company-just-one-space))
-
-(use-package tab-bar
-  :bind (("C-S-t" . tab-new-to)
-         ("C-S-w" . tab-close)
-         ([C-next] . tab-next)
-         ([C-prior] . tab-previous)
-         ([C-S-next] . tab-move)
-         ([C-S-prior] . tab-move-prev))
-  :config
-  (defun tab-move-prev (&optional arg)
-    "Move the current tab ARG positions to the left.
-If a negative ARG, move the current tab ARG positions to the right.
-You should use tab-move for that instead, though."
-    (interactive "p")
-    (tab-move (- arg)))
-
-  (setf tab-bar-close-button-show nil
-        tab-bar-new-button-show nil
-        tab-bar-button-relief 0
-        tab-bar-button-margin 4
-        tab-bar-tab-hints nil
-        tab-bar-tab-name-function 'tab-bar-tab-name-current
-        ;;tab-bar-tab-name-function 'tab-pad-bar
-        tab-bar-border 'border-width
-        tab-bar-show 1
-        tab-bar-tab-max-width 300
-        tab-bar-tab-min-width 20
-        tab-bar-separator nil
-        tab-bar-close-tab-select 'left
-        tab-bar-new-tab-to 'rightmost)
-  (custom-set-faces
-   `(tab-bar
-     ((t (:inherit default))))
-   `(tab-bar-tab
-     ((t (:box nil))))))
-
-(use-package tab-pad
-  :straight (:host github :repo "leodag/tab-pad")
-  :config
-  (tab-pad-bar-mode))
-
-;; uses a strike-through face for ^L
-(use-package form-feed
-  :straight (:host github :repo "leodag/form-feed")
-  :delight
-  :config
-  (global-form-feed-mode))
-
-(use-package projectile-header-line
-  :straight (:host github :repo "leodag/projectile-header-line")
-  :config
-  (global-projectile-header-line-mode))
-
-(use-package prettier-js :defer t
-  :commands (prettier-js))
+;;; Scratch
 
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
