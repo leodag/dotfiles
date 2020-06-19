@@ -127,7 +127,7 @@ swap() {
 /^Pid/ { pid = $2 }
 /^VmSwap/ { gsub(/^ +/, "", $2); swap = $2; print pid "," name "," swap }'
 
-    cat /proc/*/status | awk -F$'\t' "$awk" | sort -t ',' -k 3 -n -r | column --separator ',' --table --table-columns pid,name,swap --table-right pid,swap | less
+    cat /proc/*/status | awk -F$'\t' "$awk" | sort -t ',' -k 3 -n -r | column --separator ',' --table --table-columns pid,name,'swap   ' --table-right pid,'swap   ' | less
 }
 
 watchf() {
