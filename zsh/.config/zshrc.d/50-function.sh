@@ -120,3 +120,33 @@ pacfilediff() {
 
     tar xOf "$filename" "$tarpath" | diff - "$1"
 }
+
+swap() {
+    local awk='
+/^Name/ { name = $2 }
+/^Pid/ { pid = $2 }
+/^VmSwap/ { gsub(/^ +/, "", $2); swap = $2; print pid "," name "," swap }'
+
+    cat /proc/*/status | awk -F$'\t' "$awk" | sort -t ',' -k 3 -n -r | column --separator ',' --table --table-columns pid,name,swap --table-right pid,swap | less
+}
+
+watchf() {
+    if [[ $# < 1 ]]; then
+        echo "Watches a shell function"
+        echo "Usage: $0 [watch arguments...] function-name"
+        return 50
+    fi
+
+    local fun=${@[-1]}
+    local dec=$(declare -f "$fun")
+
+    if [[ $dec != "" ]]; then
+        local tmp=$(mktemp)
+        echo "$dec"$'\n'"$fun" > "$tmp"
+        watch "${@:1:-1}" "$SHELL" "$tmp"
+        rm "$tmp"
+    else
+        echo "Error: first argument is not a function"
+        return 51
+    fi
+}
