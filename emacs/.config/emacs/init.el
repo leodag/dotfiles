@@ -27,14 +27,16 @@
 
 (blink-cursor-mode -1)
 
-;; Disable "You can run the command {} with M-x {}" message
-(setq suggest-key-bindings nil
-      inhibit-startup-screen t)
+(setq inhibit-startup-screen t)
+;; Must be its own line
+(setq inhibit-startup-echo-area-message "leodag")
 
 ;; Amount of lines to keep above/below point
 (setq scroll-margin 5
       ;; A value over 100 implies never recentering
       scroll-conservatively 101)
+
+(setq-default indent-tabs-mode nil)
 
 
 ;;; Windows
@@ -191,23 +193,31 @@
 
 ;;; General setup
 
+(use-package mwheel :straight nil
+  :config
+  (setq mouse-wheel-progressive-speed nil))
+
 (use-package whitespace
   :delight whitespace-mode
   :hook ((prog-mode text-mode) . whitespace-mode)
   :custom-face
   (whitespace-tab ((t (:background "dim gray" :foreground "tan"))))
   :config
-  (setq-default indent-tabs-mode nil) ; use spaces instead of tabs
   (setq whitespace-style
         '(face trailing tabs spaces newline empty space-after-tab
                space-before-tab tab-mark)))
 
+;; Whitespace cleaning (trailing whitespaces mostly)
+(use-package ws-butler
+  :delight
+  :hook (prog-mode . ws-butler-mode))
+
 ;; uses a strike-through face for ^L
-(use-package form-feed
-  :straight (:host github :repo "leodag/form-feed")
+(use-package ff-st
+  :straight (:host github :repo "leodag/ff-st")
   :delight
   :config
-  (global-form-feed-mode))
+  (global-ff-st-mode))
 
 ;; Changes tooltip color on Windows
 (use-package tooltip :straight nil
@@ -319,16 +329,18 @@ window."
   :config
   (global-undo-tree-mode))
 
-(use-package mwheel :straight nil
-  :config
-  (setq mouse-wheel-progressive-speed nil))
-
 ;; vi keybindings
 (use-package evil
   :disabled
   :config
   (evil-mode 1)
   (setq evil-default-state 'emacs))
+
+(use-package multiple-cursors
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C->" . mc/markz-next-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
 
 ;; Show key bindings
 (use-package which-key
@@ -454,11 +466,6 @@ window."
           ("M-<left>" . windmove-left)
           ("C-M-r" . split-window-horizontally-and-switch)
           ("C-M-d" . split-window-vertically-and-switch)))
-
-;; Whitespace cleaning (trailing whitespaces mostly)
-(use-package ws-butler
-  :delight
-  :hook (prog-mode . ws-butler-mode))
 
 ;; Creates matching closing delimiter
 (use-package elec-pair
@@ -718,12 +725,6 @@ window."
 
 
 ;;; Scratch
-
-(use-package multiple-cursors
-  :bind (("C-S-c C-S-c" . mc/edit-lines)
-         ("C-<" . mc/mark-previous-like-this)
-         ("C->" . mc/markz-next-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)))
 
 (use-package explain-pause-mode
   :disabled ; causes weird delays
