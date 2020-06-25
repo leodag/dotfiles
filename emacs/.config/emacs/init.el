@@ -159,6 +159,19 @@
   (interactive)
   (load-file (find-lisp-object-file-name 'edit-init nil)))
 
+(defun back-to-indentation-or-beginning ()
+  (interactive "^")
+  (if (= (point) (progn (back-to-indentation) (point)))
+      (beginning-of-line)))
+
+(defun back-to-beginning-or-indentation ()
+  (interactive "^")
+  (if (bolp)
+      (back-to-indentation)
+    (beginning-of-line)))
+
+(global-set-key (kbd "<home>") 'back-to-beginning-or-indentation)
+
 
 ;;; Theming
 
@@ -193,6 +206,32 @@
 
 ;;; General setup
 
+(use-package simple :straight nil
+  :delight auto-fill-function
+  :hook ((text-mode emacs-lisp-mode) . auto-fill-mode)
+  :config
+  (setq-default fill-column emacs-lisp-docstring-fill-column)
+  (setq comment-auto-fill-only-comments t)
+  (setq save-interprogram-paste-before-kill t
+        suggest-key-bindings nil))
+
+(use-package subword
+  :delight
+  :config
+  (global-subword-mode))
+
+(use-package expand-region
+  :bind (("C-=" . er/expand-region)))
+
+(use-package delsel
+  :config
+  (delete-selection-mode))
+
+(use-package smart-delete
+  :straight (:host github :repo "leodag/smart-delete")
+  :defer nil
+  :hook (prog-mode . smart-delete-mode))
+
 (use-package mwheel :straight nil
   :config
   (setq mouse-wheel-progressive-speed nil))
@@ -225,6 +264,8 @@
   (custom-set-faces
    `(tooltip
      ((t (:background "white" :foreground "black" :font ,(sans-font 10)))))))
+
+(use-package vlf :defer t)
 
 (use-package tab-bar
   :bind (("C-S-t" . tab-new-to)
@@ -469,7 +510,14 @@ window."
 
 ;; Creates matching closing delimiter
 (use-package elec-pair
-  :hook ((emacs-lisp-mode lisp-mode) . electric-pair-local-mode))
+  :hook (prog-mode . electric-pair-local-mode)
+  :config
+  (setq-default
+   electric-pair-inhibit-predicate
+   `(lambda (c)
+      (if (char-equal c ?\")
+          t
+        (,electric-pair-inhibit-predicate c)))))
 
 
 ;;; General programming
@@ -478,6 +526,9 @@ window."
   :bind ("C-x g" . magit-status)
   :config
   (setq magit-completing-read-function 'ivy-completing-read))
+
+(use-package magit-gitflow
+  :hook (magit-mode . turn-on-magit-gitflow))
 
 (use-package diff-hl
   :config
@@ -489,9 +540,6 @@ window."
 
 (use-package flycheck :defer 1
   :after which-key
-  :bind (:map flycheck-error-list-mode-map
-              ("k" . flycheck-error-list-previous-error)
-              ("j" . flycheck-error-list-next-error))
   :bind-keymap ("C-c !" . flycheck-command-map)
   :config
   (global-flycheck-mode)
@@ -510,22 +558,32 @@ window."
                  (window-height   . 12))))
 
 (use-package eldoc
-  :delight)
+  :delight
+  :config
+  (setq eldoc-idle-delay 0.1))
 
 (use-package company :defer nil
   :delight
-  :bind* ("C-<tab>" . company-complete-common-or-cycle)
+  :bind* ("C-<tab>" . #'company-manual-begin)
   :bind (:map company-active-map
-              ("M-." . company-show-location))
+              ("M-." . #'company-show-location)
+              ("C-<tab>" . #'company-select-next)
+              ("C-S-<iso-lefttab>" . #'company-select-previous))
   :config
   (setq company-idle-delay 1.5)
   (global-company-mode))
 
+(use-package company-box
+  :delight
+  :hook (company-mode . company-box-mode))
+
 (use-package pos-tip
+  :disabled
   :config
   (setq pos-tip-border-width 0)) ; border renders only on top/left when set
 
 (use-package company-quickhelp
+  :disabled
   :after company
   :config
   (company-quickhelp-mode 1))
@@ -583,7 +641,23 @@ window."
 
 ;;; Elixir setup
 
+(use-package lsp-mode :defer t
+  :hook ((lsp-mode . lsp-enable-which-key-integration)
+         (elixir-mode . lsp))
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :config
+  (setq lsp-clients-elixir-server-executable "elixir-ls"))
+
+(use-package lsp-ivy :defer t)
+
+(use-package lsp-elixir
+  :after lsp-mode)
+
+(use-package elixir-mode :defer t)
+
 (use-package alchemist
+  :disabled
   :after (elixir-mode which-key)
   :config
   (which-key-add-major-mode-key-based-replacements 'elixir-mode
@@ -643,85 +717,45 @@ window."
          (csharp-mode . flycheck-mode))
   :config
   (add-to-list 'company-backends 'company-omnisharp)
-  (setq omnisharp-expected-server-version "1.35.2")
   ;; (setq omnisharp-debug t)
-  (setq omnisharp-server-executable-path
-        (concat user-emacs-directory "omnisharp-" omnisharp-expected-server-version "/run")))
+  (setq omnisharp-expected-server-version "1.35.3"))
 
 
 ;;; Python setup
 
 (use-package anaconda-mode
+  :disabled
   :hook ((python-mode . anaconda-mode)
          (python-mode . anaconda-eldoc-mode)))
 
 (use-package company-anaconda
+  :disabled
   :after anaconda-mode
   :config
   (add-to-list 'company-backends 'company-anaconda))
 
-;; company-jedi
+(use-package elpy
+  :hook (python-mode . elpy-mode)
+  :init
+  (advice-add 'python-mode :before 'elpy-enable)
+  :config
+  (setq elpy-modules (delq 'elpy-module-yasnippet elpy-modules))
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (setq elpy-modules (delq 'elpy-module-highlight-indentation elpy-modules))
+  (elpy-enable))
 
 
 ;;; JavaScript/TypeScript setup
-;; (use-package js2-mode
-;;   :interpreter "node"
-;;   :mode ("\\.js\\'"
-;;          ("\\.jsx\\'" . js2-jsx-mode)))
-
-;; (use-package js2-refactor
-;;   :after which-key
-;;   :hook (js2-mode . js2-refactor-mode)
-;;   :config
-;;   (js2r-add-keybindings-with-prefix "C-c C-m")
-;;   (which-key-add-major-mode-key-based-replacements 'js2-mode
-;;     "C-c C-m 3"     "ternary"
-;;     "C-c C-m a"     "add/arguments"
-;;     "C-c C-m b"     "barf"
-;;     "C-c C-m c"     "contract"
-;;     "C-c C-m d"     "debug"
-;;     "C-c C-m e"     "extract/expand"
-;;     "C-c C-m i"     "inject/introduce/inline"
-;;     "C-c C-m l"     "localize/log"
-;;     "C-c C-m r"     "rename"
-;;     "C-c C-m s"     "split/slurp/string"
-;;     "C-c C-m t"     "toggle"
-;;     "C-c C-m u"     "unwrap"
-;;     "C-c C-m v"     "var"
-;;     "C-c C-m w"     "wrap"))
-
-(use-package prettier-js :defer t
-  :commands (prettier-js))
-
-(use-package tern
-  :hook (js-mode . tern-mode)
-  :config
-  ;; tern tries to infer bin/tern path from location - doesn't play
-  ;; nicely with straight, since it relocates the elisp files.
-  (setq tern-command
-        `("node"
-          ,(expand-file-name ; needed on Windows to expand ~
-            (concat user-emacs-directory "straight/repos/tern/bin/tern")))))
-
-;;; deleted repository
-;; (use-package company-tern
-;;   :after tern
-;;   :config
-;;   (add-to-list 'company-backends 'company-tern))
-
-;; js-doc
-;; json-reformat
-;; json-snatcher
-;; flymake-json
-;; eslint
 
 (use-package ts-mode :defer t)
 
 (use-package tide
-  :after ts-mode
-  :hook ((ts-mode . tide-setup)
-         (ts-mode . eldoc-mode)))
-;;(ts-mode . tide-hl-identifier-mode)))
+  :hook (((ts-mode js-mode) . tide-setup)
+         ((ts-mode js-mode) . eldoc-mode)
+         (ts-mode . tide-hl-identifier-mode)))
+
+(use-package prettier-js :defer t
+  :commands (prettier-js))
 
 
 ;;; Scratch
