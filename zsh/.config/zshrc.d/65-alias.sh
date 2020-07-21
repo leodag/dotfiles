@@ -21,8 +21,8 @@ alias stoppedjobs='jobs -p | wc -l'
 # new commands
 alias da='date "+%A, %B %d, %Y [%T]"'
 alias du1='du --max-depth=1'
-alias hist='history | grep $1'    # requires an argument
-alias psg='ps -Af | grep $1'      # requires an argument (note: /usr/bin/pg is installed by util-linux)
+alias hist='history | grep'    # requires an argument
+alias psg='ps -Af | grep'      # requires an argument (note: /usr/bin/pg is installed by util-linux)
 
 # ls
 alias ls='ls -hF --color=auto'
@@ -41,7 +41,7 @@ alias chown='chown --preserve-root'
 alias chmod='chmod --preserve-root'
 alias chgrp='chgrp --preserve-root'
 
-alias usedmem="free -m | grep Mem: | awk  '{print \$3}'"
+alias usedmem="free -m | grep Mem: | awk '{print \$3}'"
 alias totmem="free -m | grep Mem: | awk '{print \$2}'"
 alias usedswap="free -m | grep Swap: | awk '{print \$3}'"
 alias totswap="free -m | grep Swap: | awk '{print \$2}'"

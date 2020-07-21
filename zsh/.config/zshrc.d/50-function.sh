@@ -17,7 +17,7 @@ up() {
 }
 
 md5() {
-    echo -n "$@" | md5sum | awk '{ printf "%s\n", $1 }'
+    echo -n "$1" | md5sum | cut -d ' ' -f 1
 }
 
 x() {
@@ -60,7 +60,7 @@ x() {
 }
 
 command-exists() {
-    which "$1" > /dev/null 2>&1
+    type "$1" > /dev/null
 }
 
 commands-exist() {
@@ -130,23 +130,33 @@ swap() {
     cat /proc/*/status | awk -F$'\t' "$awk" | sort -t ',' -k 3 -n -r | column --separator ',' --table --table-columns pid,name,'swap   ' --table-right pid,'swap   ' | less
 }
 
+# also works in bash
 watchf() {
     if [[ $# < 1 ]]; then
         echo "Watches a shell function"
-        echo "Usage: $0 [watch arguments...] function-name"
+        echo "Usage: $0 [watch arguments...] function-name [function arguments...]"
+        echo "All watch arguments must start with a dash, don't put spaces before values"
         return 50
     fi
 
-    local fun=${@[-1]}
+    local watchargs=()
+    while [[ ${1:0:1} == '-' ]]; do
+        watchargs+=("$1")
+        shift
+    done
+
+    local fun=$1
+    shift
+
     local dec=$(declare -f "$fun")
 
     if [[ $dec != "" ]]; then
         local tmp=$(mktemp)
-        echo "$dec"$'\n'"$fun" > "$tmp"
-        watch "${@:1:-1}" "$SHELL" "$tmp"
+        echo "$dec"$'\n'"$fun"' "$@"' > "$tmp"
+        watch "${watchargs[@]}" "$(realpath /proc/$$/exe)" "$tmp" "$@"
         rm "$tmp"
     else
-        echo "Error: first argument is not a function"
+        echo "Error: first argument not starting with a dash ($fun) is not a function"
         return 51
     fi
 }
