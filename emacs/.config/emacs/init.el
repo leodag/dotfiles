@@ -93,40 +93,47 @@
 
 ;;; Package management setup
 
-(defvar package-manager 'straight
-  "Package manager to be used by use-package")
-
 ;; TODO: finish package.el
-(pcase package-manager
-  ('straight
-   ;; Straight bootstrapping and configuration
-   (let ((bootstrap-file (concat user-emacs-directory "straight/repos/straight.el/bootstrap.el"))
-         (bootstrap-version 3))
-     (unless (file-exists-p bootstrap-file)
-       (with-current-buffer
-           (url-retrieve-synchronously
-            "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-            'silent 'inhibit-cookies)
-         (goto-char (point-max))
-         (eval-print-last-sexp)))
-     (load bootstrap-file nil 'nomessage))
+(eval-when-compile
+  (require 'package nil t)
+  (add-to-list 'load-path (concat user-emacs-directory "straight/repos/straight.el"))
+  (require 'straight nil t))
 
-   (straight-use-package 'use-package)
-   (setq straight-use-package-by-default t))
+(eval-and-compile
+  (defvar package-manager 'straight
+    "Package manager to be used by use-package")
 
-  ;; not really working well
-  ('package
-   (require 'package)
-   (setq package-enable-at-startup nil)
-   (add-to-list 'package-archives '("melpa" . "https://stable.melpa.org/packages/"))
-   (package-initialize t)
+  (pcase package-manager
+    ('straight
+     ;; Straight bootstrapping and configuration
+     (let ((bootstrap-file (concat user-emacs-directory "straight/repos/straight.el/bootstrap.el"))
+           (_bootstrap-version 3))
+       (unless (file-exists-p bootstrap-file)
+         (with-current-buffer
+             (url-retrieve-synchronously
+              "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+              'silent 'inhibit-cookies)
+           (goto-char (point-max))
+           (eval-print-last-sexp)))
+       (load bootstrap-file nil 'nomessage))
 
-   (unless (package-installed-p 'use-package)
-     (package-refresh-contents)
-     (package-install 'use-package))
+     (straight-use-package 'use-package)
+     (require 'use-package)
+     (setq straight-use-package-by-default t))
 
-   (require 'use-package)
-   (setq use-package-always-ensure t)))
+    ;; not really working well
+    ('package
+     (require 'package)
+     (setq package-enable-at-startup nil)
+     (add-to-list 'package-archives '("melpa" . "https://stable.melpa.org/packages/"))
+     (package-initialize t)
+
+     (unless (package-installed-p 'use-package)
+       (package-refresh-contents)
+       (package-install 'use-package))
+
+     (require 'use-package)
+     (setq use-package-always-ensure t))))
 
 (setq use-package-compute-statistics t)
 
