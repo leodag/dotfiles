@@ -44,6 +44,7 @@
 (prefer-coding-system 'utf-8-unix)
 
 (when (eq system-type 'windows-nt)
+  (defvar w32-pipe-read-delay)
   (setq w32-pipe-read-delay 0 ; default in emacs 27
         ring-bell-function 'ignore))
 
@@ -135,14 +136,12 @@
 (defun split-window-vertically-and-switch ()
   "After splitting the window, also switch to it."
   (interactive)
-  (split-window-vertically)
-  (other-window 1))
+  (select-window (split-window-vertically)))
 
 (defun split-window-horizontally-and-switch ()
   "After splitting the window, also switch to it."
   (interactive)
-  (split-window-horizontally)
-  (other-window 1))
+  (select-window (split-window-horizontally)))
 
 (defun set-frame-alpha (value)
   "Set the transparency of the frame. 0 = transparent/100 = opaque"
@@ -309,7 +308,9 @@ You should use tab-move for that instead, though."
   :config
   (winner-mode 1))
 
-(use-package treemacs :defer 2
+(use-package treemacs
+  :disabled
+  :defer 2
   :bind (("<f8>" . treemacs-select-or-deselect)
          ("S-<f8>" . treemacs-follow-and-select)
          :map treemacs-mode-map
@@ -397,6 +398,12 @@ window."
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer))
 
+(use-package ibuffer-vc
+  :after ibuffer
+  :hook (ibuffer . ibuffer-vc-set-filter-groups-by-vc-root)
+  :bind (:map ibuffer-mode-map
+              ("/ V" . ibuffer-vc-set-filter-groups-by-vc-root)))
+
 ;;; select/swap/delete windows with (C-u)* M-o
 (use-package ace-window
   :bind ("M-o" . ace-window))
@@ -424,7 +431,9 @@ window."
   :bind ("C-s" . swiper))
 
 ;; Show (current/total) in modeline when searching
-(use-package anzu :defer 1
+(use-package anzu
+  :disabled
+  :defer 1
   :delight
   :config
   (global-anzu-mode))
@@ -714,7 +723,7 @@ window."
 (use-package omnisharp
   :after (flycheck company)
   :hook ((csharp-mode . omnisharp-mode)
-         (csharp-mode . flycheck-mode))
+         (csharp-mode . lonely-brace-mode))
   :config
   (add-to-list 'company-backends 'company-omnisharp)
   ;; (setq omnisharp-debug t)
@@ -765,3 +774,8 @@ window."
   :straight (:host github :repo "lastquestion/explain-pause-mode")
   :config
   (explain-pause-mode 1))
+
+(use-package lonely-brace-mode
+  :straight (:host github :repo "leodag/lonely-brace-mode"))
+
+;;; init.el ends here
