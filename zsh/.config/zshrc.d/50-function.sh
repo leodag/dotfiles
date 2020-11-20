@@ -103,7 +103,8 @@ pacfilediff() {
         return 50
     fi
 
-    local pkg=$(pacman -Qoq "$1")
+    local pkg
+    pkg=$(pacman -Qoq "$1")
     if [[ $? != 0 ]]; then
         echo "Error: No package owns $1"
         return 51
