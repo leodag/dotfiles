@@ -765,9 +765,9 @@ window."
 (use-package ts-mode :defer t)
 
 (use-package tide
-  :hook (((ts-mode js-mode) . tide-setup)
-         ((ts-mode js-mode) . eldoc-mode)
-         (ts-mode . tide-hl-identifier-mode)))
+  :hook (((typescript-mode js-mode) . tide-setup)
+         ((typescript-mode js-mode) . eldoc-mode)
+         (typescript-mode . tide-hl-identifier-mode)))
 
 (use-package prettier-js :defer t
   :commands (prettier-js))
