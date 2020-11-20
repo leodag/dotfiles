@@ -88,7 +88,7 @@
  `(variable-pitch
    ((t (:font ,(sans-font 10)))))
  `(header-line
-   ((t (:font ,(sans-font 10))))))
+   ((t (:inherit variable-pitch)))))
 
 
 ;;; Package management setup
