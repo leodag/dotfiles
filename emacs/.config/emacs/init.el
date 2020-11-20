@@ -583,7 +583,7 @@ window."
   :bind (:map company-active-map
               ("M-." . #'company-show-location)
               ("C-<tab>" . #'company-select-next)
-              ("C-S-<iso-lefttab>" . #'company-select-previous))
+              ("C-S-<tab>" . #'company-select-previous))
   :config
   (setq company-idle-delay 1.5)
   (global-company-mode))
