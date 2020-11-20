@@ -620,6 +620,9 @@ window."
 (use-package flycheck-yamllint
   :hook (flycheck-mode . flycheck-yamllint-setup))
 
+;;; Jenkinsfile setup
+(use-package groovy-mode)
+
 
 ;;; Common Lisp setup
 
