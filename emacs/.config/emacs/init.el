@@ -501,19 +501,6 @@ window."
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-;;; The following lines are not relevant anymore, but the bug is still
-;;; present so they are kept in my init for documentation purposes.
-;;; Should report a bug someday.
-;; For sime reason, depth-%d faces don't actually inherit base-face,
-;; even though it is specified when defined
-;;(set-face-attribute 'rainbow-delimiters-base-face nil :weight 'bold)
-;; workaround for the above
-;;(dotimes (i 9)
-;;  (set-face-attribute
-;;   (intern (format "rainbow-delimiters-depth-%d-face" (1+ i)))
-;;   nil
-;;   :weight 'bold))
-
 ;; Directional window selection
 (use-package windmove
   :bind* (("M-<up>" . windmove-up)
