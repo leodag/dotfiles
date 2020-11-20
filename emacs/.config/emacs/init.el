@@ -267,9 +267,9 @@
 ;; Changes tooltip color on Windows
 (use-package tooltip :straight nil
   :config
-  (custom-set-faces
-   `(tooltip
-     ((t (:background "white" :foreground "black" :font ,(sans-font 10)))))))
+  :custom-face
+  (tooltip
+   ((t (:background "white" :foreground "black" :font ,(sans-font 10))))))
 
 (use-package vlf :defer t)
 
@@ -280,6 +280,10 @@
          ([C-prior] . tab-previous)
          ([C-S-next] . tab-move)
          ([C-S-prior] . tab-move-prev))
+  :custom-face
+  (tab-bar ((t (:inherit default))))
+  (tab-bar-tab ((t (:box nil))))
+  (tab-bar-tab-inactive ((t (:background "#eee8d5"))))
   :config
   (defun tab-move-prev (&optional arg)
     "Move the current tab ARG positions to the left.
@@ -292,12 +296,7 @@ You should use tab-move for that instead, though."
         tab-bar-new-button-show nil
         tab-bar-show 1
         tab-bar-close-tab-select 'left
-        tab-bar-new-tab-to 'rightmost)
-  (custom-set-faces
-   `(tab-bar
-     ((t (:inherit default))))
-   `(tab-bar-tab
-     ((t (:box nil))))))
+        tab-bar-new-tab-to 'rightmost))
 
 (use-package tab-pad
   :straight (:host github :repo "leodag/tab-pad")
