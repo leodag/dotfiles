@@ -665,6 +665,7 @@ window."
 (use-package lsp-ivy :defer t)
 
 (use-package lsp-elixir
+  :disabled
   :after lsp-mode)
 
 (use-package elixir-mode :defer t)
