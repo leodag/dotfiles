@@ -516,6 +516,11 @@ window."
   :delight
   :hook prog-mode)
 
+;; Highlight changed regions on undo/paste
+(use-package volatile-highlights
+  :config
+  (volatile-highlights-mode 1))
+
 ;; Directional window selection
 (use-package windmove
   :bind* (("M-<up>" . windmove-up)
