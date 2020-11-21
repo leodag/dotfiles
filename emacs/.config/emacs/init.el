@@ -511,6 +511,11 @@ window."
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+;; Highlight color names
+(use-package rainbow-mode
+  :delight
+  :hook prog-mode)
+
 ;; Directional window selection
 (use-package windmove
   :bind* (("M-<up>" . windmove-up)
