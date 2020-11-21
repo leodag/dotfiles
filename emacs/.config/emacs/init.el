@@ -506,7 +506,7 @@ window."
   (show-paren-match ((t (:foreground "black"))))
   :config
   (setq show-paren-delay 0
-        show-paren-highlight-openparen t))
+        show-paren-when-point-inside-paren t))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
