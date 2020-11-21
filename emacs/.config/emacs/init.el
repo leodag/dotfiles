@@ -271,7 +271,15 @@
   (tooltip
    ((t (:background "white" :foreground "black" :font ,(sans-font 10))))))
 
-(use-package vlf :defer t)
+(use-package vlf
+  :no-require
+  :config
+  (require 'vlf-setup))
+
+(use-package so-long
+  :config
+  (setq so-long-action 'so-long-minor-mode)
+  (global-so-long-mode))
 
 (use-package tab-bar
   :bind (("C-S-t" . tab-new-to)
