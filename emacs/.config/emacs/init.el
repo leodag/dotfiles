@@ -21,9 +21,9 @@
 
 ;; save backups in emacs.d
 (setq backup-directory-alist
-      `(("." . ,(concat user-emacs-directory "backups")))
+      `(("." . ,(expand-file-name "backups" user-emacs-directory)))
       auto-save-file-name-transforms
-      `((".*" ,(concat user-emacs-directory "backups/") t)))
+      `((".*" ,(expand-file-name "backups/" user-emacs-directory) t)))
 
 (blink-cursor-mode -1)
 
