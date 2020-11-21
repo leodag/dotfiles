@@ -300,7 +300,7 @@ You should use tab-move for that instead, though."
     (interactive "p")
     (tab-move (- arg)))
 
-  (setf tab-bar-close-button-show nil
+  (setq tab-bar-close-button-show nil
         tab-bar-new-button-show nil
         tab-bar-show 1
         tab-bar-close-tab-select 'left
