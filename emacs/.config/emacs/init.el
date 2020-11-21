@@ -193,7 +193,8 @@
 
 (use-package solarized-theme
   :config
-  (load-theme 'solarized-light t))
+  (add-to-list 'custom-theme-load-path solarized-theme-dir)
+  (load-theme 'my-solarized-light t))
 
 ;; Allows minor mode indicator manipulation
 (use-package delight :defer t)
@@ -247,8 +248,6 @@
 (use-package whitespace
   :delight whitespace-mode
   :hook ((prog-mode text-mode) . whitespace-mode)
-  :custom-face
-  (whitespace-tab ((t (:background "dim gray" :foreground "tan"))))
   :config
   (setq whitespace-style
         '(face trailing tabs spaces newline empty space-after-tab
@@ -265,13 +264,6 @@
   :delight
   :config
   (global-ff-st-mode))
-
-;; Changes tooltip color on Windows
-(use-package tooltip :straight nil
-  :config
-  :custom-face
-  (tooltip
-   ((t (:background "white" :foreground "black" :font ,(sans-font 10))))))
 
 (use-package vlf
   :no-require
@@ -290,10 +282,6 @@
          ([C-prior] . tab-previous)
          ([C-S-next] . tab-move)
          ([C-S-prior] . tab-move-prev))
-  :custom-face
-  (tab-bar ((t (:inherit default))))
-  (tab-bar-tab ((t (:box nil))))
-  (tab-bar-tab-inactive ((t (:background "#eee8d5"))))
   :config
   (defun tab-move-prev (&optional arg)
     "Move the current tab ARG positions to the left.
@@ -495,17 +483,19 @@ window."
   :delight
   :hook (prog-mode . highlight-parentheses-mode)
   :custom-face
-  (hl-paren-face ((t (:weight bold))))
+  (highlight-parentheses-highlight ((t (:weight bold))))
   :config
-  ;; only highlights as many levels of parens as the length of this list
-  ;; nil makes the face be applied, but color unaltered
-  (setq hl-paren-colors '(nil nil nil nil nil nil nil nil)))
+  ;; Only highlights as many levels of parens as the length of
+  ;; this list nil makes the face be applied, but color unaltered
+  ;; since we want rainbow-delimiters to do the coloring
+  ;; Also set in my-solarized-theme for reasons described there,
+  ;; if both values do not match will cause unexpected results
+  ;; when reloading theme
+  (setq highlight-parentheses-colors '(nil nil nil nil nil nil nil nil)))
 
 ;; Highlight matching paren
 (use-package paren
   :hook (prog-mode . show-paren-mode)
-  :custom-face
-  (show-paren-match ((t (:foreground "black"))))
   :config
   (setq show-paren-delay 0
         show-paren-when-point-inside-paren t))

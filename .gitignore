@@ -6,6 +6,8 @@
 !emacs/.config/emacs/
 !emacs/.config/emacs/init.el
 !emacs/.config/emacs/early-init.el
+!emacs/.config/emacs/themes/
+!emacs/.config/emacs/themes/my-solarized-light-theme.el
 !emacs/.config/emacs/straight/
 !emacs/.config/emacs/straight/versions/
 !emacs/.config/emacs/straight/versions/default.el
