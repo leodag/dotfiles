@@ -586,7 +586,10 @@ window."
               ("C-<tab>" . #'company-select-next)
               ("C-S-<tab>" . #'company-select-previous))
   :config
-  (setq company-idle-delay 1.5)
+  (setq company-idle-delay 1.5
+        company-tooltip-minimum-width 30
+        company-tooltip-width-grow-only t
+        company-tooltip-limit 15)
   (global-company-mode))
 
 (use-package company-box
