@@ -410,7 +410,9 @@ window."
   (which-key-mode 1))
 
 (use-package ibuffer
-  :bind ("C-x C-b" . ibuffer))
+  :bind ("C-x C-b" . ibuffer)
+  :config
+  (setq ibuffer-show-empty-filter-groups nil))
 
 (use-package ibuffer-vc
   :after ibuffer
