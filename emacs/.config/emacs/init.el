@@ -203,6 +203,8 @@
 
 (use-package tramp :defer t :straight nil)
 
+(use-package sudo-edit :defer t)
+
 (use-package ag :defer t)
 (use-package rg
   :bind ("C-c s" . rg-menu))
