@@ -375,13 +375,6 @@ window."
   :config
   (global-undo-tree-mode))
 
-;; vi keybindings
-(use-package evil
-  :disabled
-  :config
-  (evil-mode 1)
-  (setq evil-default-state 'emacs))
-
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
          ("C-<" . mc/mark-previous-like-this)
@@ -436,14 +429,6 @@ window."
 (use-package swiper
   :bind ("C-s" . swiper))
 
-;; Show (current/total) in modeline when searching
-(use-package anzu
-  :disabled
-  :defer 1
-  :delight
-  :config
-  (global-anzu-mode))
-
 (use-package projectile
   :after which-key
   :bind-keymap* ("C-c p" . projectile-command-map)
@@ -465,7 +450,6 @@ window."
   (global-projectile-header-line-mode))
 
 (use-package counsel-projectile
-  :after (counsel projectile)
   :config
   (counsel-projectile-mode 1))
 
@@ -510,6 +494,7 @@ window."
 
 ;; Highlight changed regions on undo/paste
 (use-package volatile-highlights
+  :delight
   :config
   (volatile-highlights-mode 1))
 
@@ -598,17 +583,6 @@ window."
   :delight
   :hook (company-mode . company-box-mode))
 
-(use-package pos-tip
-  :disabled
-  :config
-  (setq pos-tip-border-width 0)) ; border renders only on top/left when set
-
-(use-package company-quickhelp
-  :disabled
-  :after company
-  :config
-  (company-quickhelp-mode 1))
-
 ;;(use-package org :defer t)
 
 
@@ -674,10 +648,6 @@ window."
   (setq lsp-clients-elixir-server-executable "elixir-ls"))
 
 (use-package lsp-ivy :defer t)
-
-(use-package lsp-elixir
-  :disabled
-  :after lsp-mode)
 
 (use-package elixir-mode :defer t)
 
@@ -747,17 +717,6 @@ window."
 
 
 ;;; Python setup
-
-(use-package anaconda-mode
-  :disabled
-  :hook ((python-mode . anaconda-mode)
-         (python-mode . anaconda-eldoc-mode)))
-
-(use-package company-anaconda
-  :disabled
-  :after anaconda-mode
-  :config
-  (add-to-list 'company-backends 'company-anaconda))
 
 (use-package elpy
   :hook (python-mode . elpy-mode)
