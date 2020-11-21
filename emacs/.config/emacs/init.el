@@ -314,7 +314,7 @@ You should use tab-move for that instead, though."
 (use-package display-line-numbers
   :hook ((prog-mode text-mode) . display-line-numbers-mode)
   :config
-  (setq display-line-numbers-type 'relative
+  (setq display-line-numbers-type t
         display-line-numbers-grow-only t))
 
 ;; Buffer layout history (C-c <left>/<right>)
