@@ -252,9 +252,9 @@
   :delight whitespace-mode
   :hook ((prog-mode text-mode) . whitespace-mode)
   :config
-  (setq whitespace-style
-        '(face trailing tabs spaces newline empty space-after-tab
-               space-before-tab tab-mark)))
+  (setq-default whitespace-style
+                '(face trailing tabs newline empty space-after-tab
+                       space-before-tab tab-mark)))
 
 ;; Whitespace cleaning (trailing whitespaces mostly)
 (use-package ws-butler
