@@ -242,7 +242,6 @@
 
 (use-package smart-delete
   :straight (:host github :repo "leodag/smart-delete")
-  :defer nil
   :hook (prog-mode . smart-delete-mode))
 
 (use-package mwheel :straight nil
