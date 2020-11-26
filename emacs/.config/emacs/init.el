@@ -298,7 +298,8 @@ You should use tab-move for that instead, though."
         tab-bar-new-button-show nil
         tab-bar-show 1
         tab-bar-close-tab-select 'left
-        tab-bar-new-tab-to 'rightmost))
+        tab-bar-new-tab-to 'rightmost
+        tab-bar-new-tab-choice nil))
 
 (use-package tab-pad
   :straight (:host github :repo "leodag/tab-pad")
