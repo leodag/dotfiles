@@ -56,43 +56,27 @@
 ;;; Fonts
 
 (defvar monospace-font "Fira Mono"
-  "Preffered monospace font")
+  "Preferred monospace font")
+(defvar monospace-serif-font "Linux Libertine"
+  "Preferred monospace serif font")
 (defvar sans-serif-font "Fira Sans"
   "Preferred sans serif font")
 
-(unless (daemonp)
-  (if (member "Fira Mono" (font-family-list))
-      (setq monospace-font "Fira Mono")
-    (setq monospace-font (face-attribute 'default :family))
-    (message "Fira Mono not installed!"))
+(defun set-font-if-installed (face font)
+  (if (member monospace-font (font-family-list))
+      (set-face-attribute face nil :family font)
+    (message "Font %s not installed!" font)))
 
-  ;; TODO: better base face?
-  (if (member "Fira Sans" (font-family-list))
-      (setq sans-serif-font "Fira Sans")
-    (setq sans-serif-font (face-attribute 'variable-pitch :family))
-    (message "Fira Sans not installed!")))
+(defun do-set-font ()
+  (when window-system
+    (set-font-if-installed 'fixed-pitch-serif monospace-serif-font)
+    (set-font-if-installed 'variable-pitch sans-serif-font)
+    (set-font-if-installed 'default monospace-font)
+    (remove-hook 'server-after-make-frame-hook 'do-set-font)))
 
-(defun font-at-size (family pt)
-  "Generates a font spec for the desired font at specified size (in points)"
-  (font-spec :family family :size (float pt)))
-
-(defun mono-font (pt)
-  "Generates a font spec for the monospace font at specified size (in points)"
-  (font-at-size monospace-font pt))
-
-(defun sans-font (pt)
-  "Generates a font spec for the sans serif font at specified size (in points)"
-  (font-at-size sans-serif-font pt))
-
-(custom-set-faces
- `(default
-    ((t (:font ,(mono-font 10)))))
- `(fixed-pitch-serif
-   ((t (:font ,(mono-font 10)))))
- `(variable-pitch
-   ((t (:font ,(sans-font 10)))))
- `(header-line
-   ((t (:inherit variable-pitch)))))
+(if (daemonp)
+    (add-hook 'server-after-make-frame-hook 'do-set-font)
+  (do-set-font))
 
 
 ;;; Package management setup
