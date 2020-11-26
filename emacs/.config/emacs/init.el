@@ -31,10 +31,14 @@
 ;; Must be its own line
 (setq inhibit-startup-echo-area-message "leodag")
 
-;; Amount of lines to keep above/below point
-(setq scroll-margin 5
-      ;; A value over 100 implies never recentering
-      scroll-conservatively 101)
+
+(setq
+ ;; Amount of lines to keep above/below point
+ scroll-margin 5
+ ;; A value over 100 implies never recentering
+ scroll-conservatively 101
+ hscroll-margin 5
+ hscroll-step 1)
 
 (setq-default indent-tabs-mode nil)
 
