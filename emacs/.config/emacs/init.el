@@ -224,8 +224,8 @@
   :hook ((text-mode emacs-lisp-mode) . auto-fill-mode)
   :config
   (setq-default fill-column emacs-lisp-docstring-fill-column)
-  (setq comment-auto-fill-only-comments t)
-  (setq save-interprogram-paste-before-kill t
+  (setq comment-auto-fill-only-comments t
+        save-interprogram-paste-before-kill t
         suggest-key-bindings nil))
 
 (use-package subword
