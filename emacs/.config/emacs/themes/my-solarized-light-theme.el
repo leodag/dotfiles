@@ -8,6 +8,15 @@
   solarized-light-color-palette-alist
   '((custom-theme-set-faces
      theme-name
+     `(header-line
+       ((,class (:inherit variable-pitch
+                          :inverse-video unspecified
+                          :overline nil
+                          :underline ,s-header-line-underline
+                          :foreground ,s-header-line-fg
+                          :background ,s-header-line-bg
+                          :box (:line-width 2 :color ,s-header-line-bg
+                                            :style unspecified)))))
 ;;;;; company-mode
      `(company-tooltip-selection ((,class (:background ,blue-2bg :weight bold))))
 ;;;;; ff-st
