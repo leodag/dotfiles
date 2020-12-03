@@ -9,7 +9,7 @@
   '((custom-theme-set-faces
      theme-name
      `(header-line
-       ((,class (:inherit variable-pitch
+       ((,class (:inherit ,s-variable-pitch
                           :inverse-video unspecified
                           :overline nil
                           :underline ,s-header-line-underline
@@ -21,6 +21,15 @@
      `(company-tooltip-selection ((,class (:background ,blue-2bg :weight bold))))
 ;;;;; ff-st
      `(ff-st-line ((,class (:strike-through ,s-line))))
+;;;;; flycheck-posframe
+     `(flycheck-posframe-border-face ((,class (:foreground ,base02))))
+;;;;; neotree
+     `(neo-banner-face ((,class (:inherit ,s-variable-pitch :foreground ,base01))))
+     `(neo-header-face ((,class (:inherit ,s-variable-pitch :foreground ,blue))))
+     `(neo-root-dir-face ((,class (:inherit ,s-variable-pitch :foreground ,base1 :weight bold))))
+     `(neo-dir-link-face ((,class (:inherit ,s-variable-pitch :foreground ,blue))))
+     `(neo-file-link-face ((,class (:inherit ,s-variable-pitch :foreground ,base0))))
+     `(neo-expand-btn-face ((,class (:foreground ,base01))))
 ;;;;; paren
      `(show-paren-match ((,class (:foreground ,base3 :weight bold))))
 ;;;;; projectile-header-line

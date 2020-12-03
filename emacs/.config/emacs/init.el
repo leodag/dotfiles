@@ -307,56 +307,61 @@ You should use tab-move for that instead, though."
   :config
   (winner-mode 1))
 
-(use-package treemacs
-  :disabled
-  :defer 2
-  :bind (("<f8>" . treemacs-select-or-deselect)
-         ("S-<f8>" . treemacs-follow-and-select)
-         :map treemacs-mode-map
-         ([mouse-1] . treemacs-single-click-expand-action))
+(use-package neotree
+  :commands ()
+  ;; not using #' since that inhibits `require'ing
+  :bind (([f8] . neotree-select-or-deselect)
+         ([\S-f8] . neotree-find-in-projectile-root))
+  :hook ((neo-enter . neo-hide-on-enter-file)
+         (neo-after-create . neo-graphical-setup)
+         (neo-after-create . neo-set-projectile-header-line))
   :config
-  (defun treemacs-select-or-deselect ()
-    "Opens treemacs if it is not already open, select if it is visible but not
-selected, and select last selected window if it is selected."
+  (setq neo-theme 'ascii
+        neo-autorefresh nil
+        neo-mode-line-type 'custom
+        neo-mode-line-custom-format (propertize " Neotree" 'face 'mode-line-buffer-id)
+        neo-show-updir-line nil
+        neo-window-width 30)
+
+  (defun neotree-select-or-deselect ()
+    "Select or deselect (selecting MRU window) neotree window."
     (interactive)
-    (if (treemacs-is-treemacs-window-selected?)
+    (if (eq (current-buffer) (neo-global--get-buffer))
         (select-window (get-mru-window))
-      (treemacs-select-window)))
+      (neotree-show)))
 
-  (defun treemacs-follow-and-select ()
-    "Opens treemacs if it is not open, follow current file and select treemacs
-window."
+  (defun neotree-find-in-projectile-root ()
+    "Find file in neotree using projectile's project root."
     (interactive)
-    (if (treemacs--find-project-for-buffer)
-        (progn
-          (treemacs-find-file)
-          (treemacs-select-window))
-      (user-error "Current file is not in treemacs' workspace")))
+    (let ((project-dir (projectile-project-root))
+          (file-name (buffer-file-name)))
+      (neo-global--open)
+      (unless (and project-dir (neo-global--window-exists-p))
+        (error "Failed to find projectile's root"))
+      (setq neo-buffer--start-node project-dir)
+      (neotree-refresh)
+      (neotree-find file-name)))
 
-  (when (eq system-type 'windows-nt)
-    (setq treemacs-python-executable "python"))
+  (defun neo-hide-on-enter-file (type _full-path arg)
+    "Meant to be added as a `neo-enter-hook'.
+If entering a file, hide neotree.  TYPE ARG"
+    (when (and (not arg) (eq type 'file))
+      (neotree-hide)))
 
-  (let ((font (sans-font 9)))
-    (set-face-attribute 'treemacs-root-face      nil :font font)
-    (set-face-attribute 'treemacs-file-face      nil :font font)
-    (set-face-attribute 'treemacs-directory-face nil :font font)
-    (set-face-attribute 'treemacs-tags-face      nil :font font)
-    (dolist
-        (type '("added" "conflict" "ignored" "modified" "renamed" "unmodified" "untracked"))
-      (set-face-attribute
-       (intern (format "treemacs-git-%s-face" type))
-       nil
-       :font font)))
+  (defun neo-graphical-setup (&optional _window)
+    "Set graphical configurations for neotree."
+    (setq cursor-type 'bar
+          indicate-empty-lines nil))
 
-  (setq treemacs-indentation 2)
-
-  (treemacs-follow-mode -1)
-  (treemacs-filewatch-mode 1)
-  (treemacs-fringe-indicator-mode 1)
-  (treemacs-git-mode
-   (pcase system-type
-     ('gnu/linux 'deferred)
-     ('windows-nt 'simple))))
+  (defun neo-set-projectile-header-line (&optional _window)
+    "Set neotree's header line to show the current project.
+Akin to `projectile-header-line''s behaviour."
+    (setq header-line-format
+          `((:propertize " " display (space :width 1))
+            "["
+            (:propertize (:eval (projectile-project-name neo-buffer--start-node))
+                         face projectile-header-line-project)
+            "]"))))
 
 ;; Auto-reload modified files; warn on overlapping changes
 (use-package autorevert
