@@ -787,4 +787,14 @@ argument, or in other frame with two arguments."
 (use-package lonely-brace-mode
   :straight (:host github :repo "leodag/lonely-brace-mode"))
 
+(defun pop-to-other-window ()
+  "Go to previous buffer, taking current one to other window.
+Very useful when a command decides to pop into the window you
+were working on."
+  (interactive)
+  (display-buffer (current-buffer) t)
+  (switch-to-prev-buffer nil t))
+
+(global-set-key (kbd "C-z C-o") #'pop-to-other-window)
+
 ;;; init.el ends here
