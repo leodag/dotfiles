@@ -197,7 +197,7 @@
 
 ;;; Utilities
 
-(use-package tramp :defer t :straight nil)
+(use-package tramp :defer t)
 
 (use-package sudo-edit :defer t)
 
@@ -402,8 +402,9 @@ window."
 (use-package ace-window
   :bind ("M-o" . ace-window))
 
-(use-package ivy
+(use-package ivy :demand
   :delight
+  :bind ("C-z C-r" . #'ivy-resume)
   :config
   (ivy-mode 1)
   (setq ivy-count-format "(%d/%d) "
@@ -412,8 +413,7 @@ window."
 
 (use-package ivy-hydra :after ivy)
 
-(use-package counsel
-  :defer nil
+(use-package counsel :demand
   :after ivy
   :delight
   :bind ("M-X" . set-variable)
@@ -536,7 +536,7 @@ window."
   (global-diff-hl-mode 1)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
-(use-package flycheck :defer 1
+(use-package flycheck :demand
   :after which-key
   :bind-keymap ("C-c !" . flycheck-command-map)
   :config
@@ -560,7 +560,7 @@ window."
   :config
   (setq eldoc-idle-delay 0.1))
 
-(use-package company :defer nil
+(use-package company :demand
   :delight
   :bind* ("C-<tab>" . #'company-manual-begin)
   :bind (:map company-active-map
@@ -583,8 +583,7 @@ window."
 
 ;;; Docker setup
 
-(use-package docker
-  :defer t
+(use-package docker :defer t
   :commands (docker))
 
 (use-package dockerfile-mode :defer t)
@@ -596,7 +595,7 @@ window."
   :hook (flycheck-mode . flycheck-yamllint-setup))
 
 ;;; Jenkinsfile setup
-(use-package groovy-mode)
+(use-package groovy-mode :defer t)
 
 
 ;;; Common Lisp setup
@@ -668,7 +667,7 @@ window."
 
 ;;; Clojure setup
 
-(use-package cider :after clojure-mode)
+(use-package cider :defer t)
 
 
 ;;; C++ setup
