@@ -678,12 +678,12 @@ window."
   :hook (irony-mode . irony-eldoc))
 
 (use-package company-irony
-  :after irony
+  :after company irony
   :config
   (add-to-list 'company-backends 'company-irony))
 
 (use-package company-irony-c-headers
-  :after irony
+  :after company irony
   :config
   (add-to-list 'company-backends 'company-irony-c-headers))
 
