@@ -707,15 +707,13 @@ window."
 
 ;;; Python setup
 
-(use-package elpy
-  :hook (python-mode . elpy-mode)
+(use-package elpy :defer t
   :init
   (advice-add 'python-mode :before 'elpy-enable)
   :config
   (setq elpy-modules (delq 'elpy-module-yasnippet elpy-modules))
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (setq elpy-modules (delq 'elpy-module-highlight-indentation elpy-modules))
-  (elpy-enable))
+  (setq elpy-modules (delq 'elpy-module-highlight-indentation elpy-modules)))
 
 
 ;;; JavaScript/TypeScript setup
