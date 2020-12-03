@@ -428,18 +428,21 @@ window."
 
 (use-package projectile
   :after which-key
+  ;; Projectile-header-line taks care of displaying project name
+  :delight
   :bind-keymap* ("C-c p" . projectile-command-map)
   :config
   (projectile-mode 1)
   (setq projectile-project-search-path '("~/proj/")
         projectile-completion-system 'ivy
         projectile-indexing-method 'alien)
-  (which-key-add-key-based-replacements
-    "C-c p"   "projectile"
-    "C-c p 4" "other-window"
-    "C-c p 5" "other-frame"
-    "C-c p s" "search"
-    "C-c p x" "execute"))
+  (which-key-add-keymap-based-replacements global-map
+    "C-c p" '("projectile" . projectile-command-map))
+  (which-key-add-keymap-based-replacements projectile-command-map
+    "4" "other-window"
+    "5" "other-frame"
+    "s" "search"
+    "x" "execute"))
 
 (use-package projectile-header-line
   :straight (:host github :repo "leodag/projectile-header-line")
