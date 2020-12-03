@@ -38,7 +38,8 @@
  ;; A value over 100 implies never recentering
  scroll-conservatively 101
  hscroll-margin 5
- hscroll-step 1)
+ hscroll-step 1
+ scroll-preserve-screen-position t)
 
 (setq-default indent-tabs-mode nil)
 
