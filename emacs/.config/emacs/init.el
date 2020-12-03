@@ -578,6 +578,27 @@ Akin to `projectile-header-line''s behaviour."
   :config
   (setq eldoc-idle-delay 0.1))
 
+(use-package xref :ensure t
+  :bind ([remap xref-find-definitions] . #'ace-xref-find-definitions)
+  :config
+  (defun ace-xref-find-definitions (arg)
+    "Find definition, in other window or other frame with ARG.
+Finds definition in this window, or in other window with one
+argument, or in other frame with two arguments."
+    (interactive "p")
+    (let* ((command (cl-case arg
+                      (1
+                       'xref-find-definitions)
+                      (4
+                       'xref-find-definitions-other-window)
+                      (16
+                       'xref-find-definitions-other-frame)))
+           ;; `xref--read-identifier' checks these variables and
+           ;;  will prompt for an identificer if they are incorrect
+           (this-command command)
+           (current-prefix-arg nil))
+      (call-interactively command))))
+
 (use-package company :demand
   :after counsel
   :delight
