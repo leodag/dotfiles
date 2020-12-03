@@ -1,4 +1,10 @@
-;;; init.el -*- lexical-binding: t -*-
+;;; init.el --- leodag's init -*- lexical-binding: t -*-
+
+;;; Commentary:
+
+;; I'm just writing this to appease emacs-lisp-checkdoc.
+
+;;; Code:
 
 
 ;;; Custom
@@ -30,7 +36,6 @@
 (setq inhibit-startup-screen t)
 ;; Must be its own line
 (setq inhibit-startup-echo-area-message "leodag")
-
 
 (setq
  ;; Amount of lines to keep above/below point
@@ -69,19 +74,23 @@
 ;;; Fonts
 
 (defvar monospace-font "Fira Mono"
-  "Preferred monospace font")
-  "Preferred monospace serif font")
+  "Preferred monospace font.")
 (defvar monospace-serif-font "Linux Libertine Mono"
+  "Preferred monospace serif font.")
 (defvar sans-serif-font "Fira Sans"
-  "Preferred sans serif font")
+  "Preferred sans serif font.")
 
 (defun set-font-if-installed (face font)
+  "Set FONT as FACE's family if it is detected in the system."
   (if (member monospace-font (font-family-list))
       (set-face-attribute face nil :family font)
     (message "Font %s not installed!" font)))
 
 (defun do-set-font ()
-  (when window-system
+  "Actually set fonts.
+Will only run on the first creation of a graphic frame, otherwise
+font presence cannot be detected."
+  (when (display-multi-font-p)
     (set-font-if-installed 'fixed-pitch-serif monospace-serif-font)
     (set-font-if-installed 'variable-pitch sans-serif-font)
     (set-font-if-installed 'default monospace-font)
@@ -135,37 +144,40 @@
 
 ;;; Utility functions
 
-(defun split-window-vertically-and-switch ()
+(defun split-window-vertically-and-select ()
   "After splitting the window, also switch to it."
   (interactive)
   (select-window (split-window-vertically)))
 
-(defun split-window-horizontally-and-switch ()
+(defun split-window-horizontally-and-select ()
   "After splitting the window, also switch to it."
   (interactive)
   (select-window (split-window-horizontally)))
 
 (defun set-frame-alpha (value)
-  "Set the transparency of the frame. 0 = transparent/100 = opaque"
+  "Set the transparency of the frame to VALUE.
+0 = transparent/100 = opaque."
   (interactive "nAlpha value (0-100=opaque): ")
   (set-frame-parameter (selected-frame) 'alpha value))
 
 (defun edit-init ()
-  "Edit init.el"
+  "Edit init.el."
   (interactive)
   (find-file (find-lisp-object-file-name 'edit-init nil)))
 
 (defun reload-init ()
-  "Reload init.el"
+  "Reload init.el."
   (interactive)
-  (load-file (find-lisp-object-file-name 'edit-init nil)))
+  (load-file (find-lisp-object-file-name 'reload-init nil)))
 
 (defun back-to-indentation-or-beginning ()
+  "Go back to indentation or to the beginning of the line."
   (interactive "^")
   (if (= (point) (progn (back-to-indentation) (point)))
       (beginning-of-line)))
 
 (defun back-to-beginning-or-indentation ()
+  "Go back to the beginning of the line or to indentation."
   (interactive "^")
   (if (bolp)
       (back-to-indentation)
@@ -280,7 +292,7 @@
   (defun tab-move-prev (&optional arg)
     "Move the current tab ARG positions to the left.
 If a negative ARG, move the current tab ARG positions to the right.
-You should use tab-move for that instead, though."
+You should use `tab-move' for that instead, though."
     (interactive "p")
     (tab-move (- arg)))
 
@@ -509,8 +521,8 @@ Akin to `projectile-header-line''s behaviour."
           ("M-<down>" . windmove-down)
           ("M-<right>" . windmove-right)
           ("M-<left>" . windmove-left)
-          ("C-M-r" . split-window-horizontally-and-switch)
-          ("C-M-d" . split-window-vertically-and-switch)))
+          ("C-M-r" . split-window-horizontally-and-select)
+          ("C-M-d" . split-window-vertically-and-select)))
 
 ;; Creates matching closing delimiter
 (use-package elec-pair
@@ -553,9 +565,7 @@ Akin to `projectile-header-line''s behaviour."
   (global-flycheck-mode)
   (which-key-add-key-based-replacements "C-c !" "flycheck")
   ;; Remove annoying init.el warning
-  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-  ;; TODO: make this work and exclude yamllint-document-start in yamllint's use
-  ;;(add-to-list (default-value 'flycheck-disabled-checkers) 'emacs-lisp-checkdoc)
+  ;;(cl-pushnew 'emacs-lisp-checkdoc (default-value 'flycheck-disabled-checkers))
   ;; All this just to limit height
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*Flycheck errors*" eos)
