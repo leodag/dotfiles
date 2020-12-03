@@ -43,9 +43,21 @@
 
 (setq-default indent-tabs-mode nil)
 
+;; Remove some unwanted behaviours
+(setq confirm-kill-emacs #'yes-or-no-p)
+;; If I ever want to suspend-frame I can M-x
+(global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "C-x C-z"))
+
+(with-current-buffer "*scratch*"
+  (emacs-lock-mode 'kill))
+
+(setq mouse-autoselect-window t)
+
 
 ;;; Windows
 
+;; Use LF by default
 (prefer-coding-system 'utf-8-unix)
 
 (when (eq system-type 'windows-nt)
