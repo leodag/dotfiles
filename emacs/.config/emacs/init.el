@@ -416,7 +416,9 @@ window."
 (use-package counsel :demand
   :after ivy
   :delight
-  :bind ("M-X" . set-variable)
+  :bind (("M-X" . #'counsel-set-variable)
+         ("C-x b" . #'counsel-switch-buffer)
+         ("C-x M-b" . #'counsel-switch-buffer-other-window))
   :config
   (counsel-mode 1))
 
