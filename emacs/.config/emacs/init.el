@@ -94,12 +94,6 @@
 
 ;;; Package management setup
 
-;; TODO: finish package.el
-(eval-when-compile
-  (require 'package nil t)
-  (add-to-list 'load-path (concat user-emacs-directory "straight/repos/straight.el"))
-  (require 'straight nil t))
-
 (eval-and-compile
   (defvar package-manager 'straight
     "Package manager to be used by use-package")
@@ -118,25 +112,25 @@
            (eval-print-last-sexp)))
        (load bootstrap-file nil 'nomessage))
 
-     (straight-use-package 'use-package)
-     (require 'use-package)
-     (setq straight-use-package-by-default t))
+     (require 'straight)
+     (straight-use-package 'use-package))
 
     ;; not really working well
     ('package
      (require 'package)
-     (setq package-enable-at-startup nil)
      (add-to-list 'package-archives '("melpa" . "https://stable.melpa.org/packages/"))
-     (package-initialize t)
+     (package-initialize)
 
      (unless (package-installed-p 'use-package)
        (package-refresh-contents)
-       (package-install 'use-package))
+       (package-install 'use-package)))))
 
-     (require 'use-package)
-     (setq use-package-always-ensure t))))
+(require 'use-package)
 
 (setq use-package-compute-statistics t)
+(when (eq package-manager 'straight)
+  (setq straight-use-package-by-default t))
+(setq use-package-always-ensure (eq package-manager 'package))
 
 
 ;;; Utility functions
