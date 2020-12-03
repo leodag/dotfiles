@@ -560,6 +560,14 @@ window."
                  (reusable-frames . visible)
                  (window-height   . 12))))
 
+(use-package flycheck-posframe
+  :hook ((flycheck-mode . flycheck-posframe-mode)
+         (flycheck-posframe-mode . flycheck-posframe-configure-pretty-defaults))
+  :config
+  (setq posframe-mouse-banish nil
+        flycheck-posframe-position 'window-bottom-left-corner
+        flycheck-posframe-border-width 1))
+
 (use-package eldoc
   :delight
   :config
