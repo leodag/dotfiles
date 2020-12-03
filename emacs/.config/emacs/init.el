@@ -718,7 +718,7 @@ window."
 
 ;;; JavaScript/TypeScript setup
 
-(use-package ts-mode :defer t)
+(use-package typescript-mode :defer t)
 
 (use-package tide
   :hook (((typescript-mode js-mode) . tide-setup)
