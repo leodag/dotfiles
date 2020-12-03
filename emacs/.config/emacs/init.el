@@ -574,17 +574,20 @@ window."
   (setq eldoc-idle-delay 0.1))
 
 (use-package company :demand
+  :after counsel
   :delight
   :bind* ("C-<tab>" . #'company-manual-begin)
   :bind (:map company-active-map
               ("M-." . #'company-show-location)
               ("C-<tab>" . #'company-select-next)
-              ("C-S-<tab>" . #'company-select-previous))
+              ("C-S-<iso-lefttab>" . #'company-select-previous)
+              ("C-o" . #'counsel-company))
   :config
   (setq company-idle-delay 1.5
         company-tooltip-minimum-width 30
         company-tooltip-width-grow-only t
-        company-tooltip-limit 15)
+        company-tooltip-limit 15
+        company-tooltip-align-annotations t)
   (global-company-mode))
 
 (use-package company-box
