@@ -124,7 +124,7 @@ font presence cannot be detected."
 
 (eval-and-compile
   (defvar package-manager 'straight
-    "Package manager to be used by use-package")
+    "Package manager to be used by use-package.")
 
   (pcase package-manager
     ('straight
