@@ -79,11 +79,24 @@
   "Preferred monospace serif font.")
 (defvar sans-serif-font "Fira Sans"
   "Preferred sans serif font.")
+(defvar emoji-font "Noto Color Emoji"
+  "Preferred emoji font.")
+
+(defun font-installed-p (font)
+  "Check if FONT is avaliable in the system."
+  (member font (font-family-list)))
 
 (defun set-font-if-installed (face font)
   "Set FONT as FACE's family if it is detected in the system."
-  (if (member monospace-font (font-family-list))
+  (if (font-installed-p font)
       (set-face-attribute face nil :family font)
+    (message "Font %s not installed!" font)))
+
+(defun set-fontset-font-if-installed (target font &optional add)
+  "Set FONT as a fontset font for TARGET if installed.
+See `set-fontset-font' for ADD."
+  (if (font-installed-p font)
+      (set-fontset-font t target font nil add)
     (message "Font %s not installed!" font)))
 
 (defun do-set-font ()
@@ -94,6 +107,7 @@ font presence cannot be detected."
     (set-font-if-installed 'fixed-pitch-serif monospace-serif-font)
     (set-font-if-installed 'variable-pitch sans-serif-font)
     (set-font-if-installed 'default monospace-font)
+    (set-fontset-font-if-installed 'symbol emoji-font t)
     (remove-hook 'server-after-make-frame-hook 'do-set-font)))
 
 (if (daemonp)
