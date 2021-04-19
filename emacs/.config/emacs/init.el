@@ -59,6 +59,11 @@
 
 (setq mouse-autoselect-window t)
 
+(defvar leodag-map (make-sparse-keymap)
+  "My keymap.")
+
+(global-set-key (kbd "C-z") leodag-map)
+
 
 ;;; Windows
 
@@ -820,6 +825,6 @@ were working on."
   (display-buffer (current-buffer) t)
   (switch-to-prev-buffer nil t))
 
-(global-set-key (kbd "C-z C-o") #'pop-to-other-window)
+(define-key leodag-map (kbd "C-o") #'pop-to-other-window)
 
 ;;; init.el ends here
