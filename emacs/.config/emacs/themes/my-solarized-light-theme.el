@@ -22,7 +22,7 @@
 ;;;;; ff-st
      `(ff-st-line ((,class (:strike-through ,s-line))))
 ;;;;; flycheck-posframe
-     `(flycheck-posframe-border-face ((,class (:foreground ,base02))))
+     `(flycheck-posframe-border-face ((,class (:foreground ,s-line))))
 ;;;;; neotree
      `(neo-banner-face ((,class (:inherit ,s-variable-pitch :foreground ,base01))))
      `(neo-header-face ((,class (:inherit ,s-variable-pitch :foreground ,blue))))
