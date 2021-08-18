@@ -750,7 +750,7 @@ argument, or in other frame with two arguments."
 (use-package yaml-mode :defer)
 
 (use-package flycheck-yamllint
-  :hook (flycheck-mode . flycheck-yamllint-setup))
+  :after (flycheck yaml-mode))
 
 ;;; Jenkinsfile setup
 (use-package groovy-mode :defer)
