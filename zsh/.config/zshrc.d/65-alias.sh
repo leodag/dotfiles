@@ -46,5 +46,6 @@ alias totmem="free -m | grep Mem: | awk '{print \$2}'"
 alias usedswap="free -m | grep Swap: | awk '{print \$3}'"
 alias totswap="free -m | grep Swap: | awk '{print \$2}'"
 
+alias with-docker="sudo -g docker -E"
 #alias docker='sudo docker'
 #alias docker-compose='sudo docker-compose'
