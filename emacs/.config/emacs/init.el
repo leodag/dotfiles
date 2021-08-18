@@ -557,6 +557,7 @@ Akin to `projectile-header-line''s behaviour."
   ;; Projectile-header-line taks care of displaying project name
   :delight
   :bind-keymap* ("C-c p" . projectile-command-map)
+  :commands (projectile-project-root)
   :config
   (projectile-mode 1)
   (setq projectile-project-search-path '("~/proj/")
