@@ -1,4 +1,20 @@
-function () {
+set_titlebar() {
+    print -Pn '\033]0;%n@%m %4~\007'
+}
+add-zsh-hook precmd set_titlebar
+
+# makes print_end_time not run at the first prompt
+add_print_end_time() {
+    add-zsh-hook -d precmd add_print_end_time
+    add-zsh-hook precmd print_end_time
+}
+add-zsh-hook precmd add_print_end_time
+
+print_end_time() {
+    print -P "Finished at %F{$TIMECOLOR}%*%f"
+}
+
+() {
     local SSH_COLOR
     local SSH_FAILCOLOR
     local ROOT_COLOR
@@ -8,8 +24,6 @@ function () {
     local U_C
     local U_FC
     local UN_C
-
-    TITLEBAR='\033]0;%n@%m %4~\007'
 
     SSH_COLOR=cyan
     SSH_FAILCOLOR=red
@@ -40,12 +54,7 @@ function () {
         UN_C=${U_C}
     fi
 
-    precmd() {
-        print -Pn "$TITLEBAR"
-        rehash
-        #echo -ne "\a"
-    }
-
+    TIMECOLOR=$U_C
     PROMPT="\
 %F{$U_C}%B[%(1j.%F{$U_FC}.%F{$U_C})%j%F{$U_C}]+%f Returned %(?.%F{$U_C}.%F{$U_FC})%?%f%b
 %F{$U_C}%B[%*]%b%F{$U_C}[%F{$UN_C}%n%F{$U_C}@%m %4~]%B%f
