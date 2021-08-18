@@ -34,24 +34,24 @@ print_end_time() {
     NORMAL_COLOR=green
     NORMAL_FAILCOLOR=red
 
-    if [[ -n "$SSH_CLIENT" ]]; then
-        U_C=${SSH_COLOR}
-        U_FC=${SSH_FAILCOLOR}
+    if [[ -n $SSH_CLIENT ]]; then
+        U_C=$SSH_COLOR
+        U_FC=$SSH_FAILCOLOR
 
         if [[ $UID == 0 ]]; then
-            UN_C=${ROOT_COLOR}
+            UN_C=$ROOT_COLOR
         else
-            UN_C=${U_C}
+            UN_C=$U_C
         fi
     else
         if [[ $UID == 0 ]]; then
-            U_C=${ROOT_COLOR}
-            U_FC=${ROOT_FAILCOLOR}
+            U_C=$ROOT_COLOR
+            U_FC=$ROOT_FAILCOLOR
         else
-            U_C=${NORMAL_COLOR}
-            U_FC=${NORMAL_FAILCOLOR}
+            U_C=$NORMAL_COLOR
+            U_FC=$NORMAL_FAILCOLOR
         fi
-        UN_C=${U_C}
+        UN_C=$U_C
     fi
 
     TIMECOLOR=$U_C
