@@ -232,10 +232,6 @@ font presence cannot be detected."
 
 (use-package sudo-edit :defer)
 
-(use-package ag :defer)
-(use-package rg
-  :bind ("C-c s" . rg-menu))
-
 (use-package all-the-icons :defer)
 
 
