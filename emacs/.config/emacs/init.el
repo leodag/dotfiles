@@ -551,8 +551,9 @@ Akin to `projectile-header-line''s behaviour."
          ("M-%" . #'swiper-query-replace)))
 
 (use-package projectile
-  ;; Projectile-header-line taks care of displaying project name
   :delight
+  :bind (:map leodag-map
+              ("C-f" . projectile-find-file))
   :bind-keymap* ("C-c p" . projectile-command-map)
   :commands (projectile-project-root)
   :config
