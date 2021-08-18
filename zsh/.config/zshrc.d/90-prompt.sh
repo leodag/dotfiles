@@ -57,6 +57,6 @@ print_end_time() {
     TIMECOLOR=$U_C
     PROMPT="\
 %F{$U_C}%B[%(1j.%F{$U_FC}.%F{$U_C})%j%F{$U_C}]+%f Returned %(?.%F{$U_C}.%F{$U_FC})%?%f%b
-%F{$U_C}%B[%*]%b%F{$U_C}[%F{$UN_C}%n%F{$U_C}@%m %4~]%B%f
+%F{$U_C}%B[%D{%H:%M:%S}]%b%F{$U_C}[%F{$UN_C}%n%F{$U_C}@%m %4~]%B%f
 %#%b "
 }
