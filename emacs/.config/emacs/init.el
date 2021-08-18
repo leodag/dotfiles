@@ -461,10 +461,6 @@ Akin to `projectile-header-line''s behaviour."
          ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
          ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
          ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-         ;; Custom M-# bindings for fast register access
-         ("C-z m" . consult-register-load)
-         ("C-z '" . point-to-register)
-         ("C-z #" . consult-register)
          ;; Other custom bindings
          ("M-y" . consult-yank-pop)                ;; orig. yank-pop
          ("<help> a" . consult-apropos)            ;; orig. apropos-command
@@ -494,7 +490,12 @@ Akin to `projectile-header-line''s behaviour."
          ("M-e" . consult-isearch)                 ;; orig. isearch-edit-string
          ("M-s e" . consult-isearch)               ;; orig. isearch-edit-string
          ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi))           ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ;; Custom M-# bindings for fast register access
+         :map leodag-map
+         ("z z" . consult-register-load)
+         ("z s" . point-to-register)
+         ("z r" . consult-register))
   :init
   ;; Optionally configure the register formatting. This improves the register
   ;; preview for `consult-register', `consult-register-load',
