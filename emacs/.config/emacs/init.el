@@ -223,20 +223,20 @@ font presence cannot be detected."
   (load-theme 'my-solarized-light t))
 
 ;; Allows minor mode indicator manipulation
-(use-package delight :defer t)
+(use-package delight :defer)
 
 
 ;;; Utilities
 
-(use-package tramp :defer t)
+(use-package tramp :defer)
 
-(use-package sudo-edit :defer t)
+(use-package sudo-edit :defer)
 
-(use-package ag :defer t)
+(use-package ag :defer)
 (use-package rg
   :bind ("C-c s" . rg-menu))
 
-(use-package all-the-icons :defer t)
+(use-package all-the-icons :defer)
 
 
 ;;; General setup
@@ -664,7 +664,8 @@ Akin to `projectile-header-line''s behaviour."
   (global-diff-hl-mode 1)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
-(use-package flycheck :demand
+(use-package flycheck
+  :demand
   :bind-keymap ("C-c !" . flycheck-command-map)
   :config
   (global-flycheck-mode)
@@ -739,24 +740,26 @@ argument, or in other frame with two arguments."
 
 ;;; Docker setup
 
-(use-package docker :defer t
+(use-package docker
+  :defer
   :commands (docker))
 
-(use-package dockerfile-mode :defer t)
+(use-package dockerfile-mode :defer)
 
 ;;; YAML setup
-(use-package yaml-mode :defer t)
+(use-package yaml-mode :defer)
 
 (use-package flycheck-yamllint
   :hook (flycheck-mode . flycheck-yamllint-setup))
 
 ;;; Jenkinsfile setup
-(use-package groovy-mode :defer t)
+(use-package groovy-mode :defer)
 
 
 ;;; Common Lisp setup
 
-(use-package slime :defer t
+(use-package slime
+  :defer
   :config
   (setq inferior-lisp-program "sbcl"))
 
@@ -772,9 +775,9 @@ argument, or in other frame with two arguments."
 
 ;;; Rust setup
 
-(use-package toml-mode :defer t)
+(use-package toml-mode :defer)
 
-(use-package rust-mode :defer t)
+(use-package rust-mode :defer)
 
 (use-package cargo
   :hook (rust-mode . cargo-minor-mode))
@@ -789,7 +792,8 @@ argument, or in other frame with two arguments."
 
 ;;; Elixir setup
 
-(use-package lsp-mode :defer t
+(use-package lsp-mode
+  :defer
   :hook ((lsp-mode . lsp-enable-which-key-integration)
          (elixir-mode . lsp))
   :init
@@ -797,7 +801,7 @@ argument, or in other frame with two arguments."
   :config
   (setq lsp-clients-elixir-server-executable "elixir-ls"))
 
-(use-package elixir-mode :defer t)
+(use-package elixir-mode :defer)
 
 (use-package alchemist
   :disabled
@@ -821,7 +825,7 @@ argument, or in other frame with two arguments."
 
 ;;; Clojure setup
 
-(use-package cider :defer t)
+(use-package cider :defer)
 
 
 ;;; C++ setup
@@ -866,7 +870,8 @@ argument, or in other frame with two arguments."
 
 ;;; Python setup
 
-(use-package elpy :defer t
+(use-package elpy
+  :defer
   :init
   (advice-add 'python-mode :before 'elpy-enable)
   :config
@@ -877,14 +882,15 @@ argument, or in other frame with two arguments."
 
 ;;; JavaScript/TypeScript setup
 
-(use-package typescript-mode :defer t)
+(use-package typescript-mode :defer)
 
 (use-package tide
   :hook (((typescript-mode js-mode) . tide-setup)
          ((typescript-mode js-mode) . eldoc-mode)
          (typescript-mode . tide-hl-identifier-mode)))
 
-(use-package prettier-js :defer t
+(use-package prettier-js
+  :defer
   :commands (prettier-js))
 
 
