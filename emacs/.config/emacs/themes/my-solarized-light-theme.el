@@ -46,9 +46,7 @@
      ;; Default green-lc/green-hc is way too dark
      `(vhl/default-face ((,class (:background ,green-1bg :foreground ,green-1fg))))
 ;;;;; whitespace
-     `(whitespace-tab ((,class (:foreground ,base01 :inverse-video nil))))
-;;;;; consult
-     `(consult-preview-line ((,class (:background ,base02 :extend nil)))))
+     `(whitespace-tab ((,class (:foreground ,base01 :inverse-video nil)))))
     (custom-theme-set-variables
      theme-name
 ;;;;; highlight-parentheses
