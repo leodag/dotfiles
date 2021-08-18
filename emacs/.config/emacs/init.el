@@ -340,7 +340,6 @@ You should use `tab-move' for that instead, though."
   (winner-mode 1))
 
 (use-package neotree
-  :commands ()
   ;; not using #' since that inhibits `require'ing
   :bind (([f8] . neotree-select-or-deselect)
          ([\S-f8] . neotree-find-in-projectile-root))
