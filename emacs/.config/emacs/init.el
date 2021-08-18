@@ -415,13 +415,12 @@ Akin to `projectile-header-line''s behaviour."
 
 ;; Show key bindings
 (use-package which-key
+  :demand
   :delight
+  :commands (which-key-add-major-mode-key-based-replacements
+              which-key-add-keymap-based-replacements
+              which-key-add-key-based-replacements)
   :config
-  ;; TODO: not monospace
-  ;;(add-to-list 'which-key-replacement-alist '(("TAB" . nil) . ("↹" . nil)))
-  ;;(add-to-list 'which-key-replacement-alist '(("RET" . nil) . ("⏎" . nil)))
-  ;;(add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil)))
-  ;;(add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil))))
   (which-key-mode 1))
 
 (use-package ibuffer
@@ -556,7 +555,6 @@ Akin to `projectile-header-line''s behaviour."
          ("M-%" . #'swiper-query-replace)))
 
 (use-package projectile
-  :after which-key
   ;; Projectile-header-line taks care of displaying project name
   :delight
   :bind-keymap* ("C-c p" . projectile-command-map)
@@ -667,7 +665,6 @@ Akin to `projectile-header-line''s behaviour."
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
 (use-package flycheck :demand
-  :after which-key
   :bind-keymap ("C-c !" . flycheck-command-map)
   :config
   (global-flycheck-mode)
@@ -804,7 +801,7 @@ argument, or in other frame with two arguments."
 
 (use-package alchemist
   :disabled
-  :after (elixir-mode which-key)
+  :after (elixir-mode)
   :config
   (which-key-add-major-mode-key-based-replacements 'elixir-mode
     "C-c a"     "alchemist"
