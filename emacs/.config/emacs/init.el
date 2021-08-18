@@ -439,29 +439,121 @@ Akin to `projectile-header-line''s behaviour."
 (use-package ace-window
   :bind ("M-o" . ace-window))
 
-(use-package ivy :demand
-  :delight
-  :bind ("C-z C-r" . #'ivy-resume)
+(use-package selectrum
+  :demand
+  :bind (:map leodag-map
+              ("r" . selectrum-repeat))
   :config
-  (ivy-mode 1)
-  (setq ivy-count-format "(%d/%d) "
+  (selectrum-mode 1))
+
+(use-package selectrum-prescient
+  :config
+  (selectrum-prescient-mode 1)
+  (prescient-persist-mode 1))
+
+(use-package embark
+  :bind (("C-." . embark-act)
+         ("C-;" . embark-dwim)
+         ("C-h b" . embark-bindings))
+  :init
+  (setq prefix-help-command #'embark-prefix-help-command))
+
+(use-package consult
+  :bind (("M-X" . set-variable)
+         ;; C-c bindings (mode-specific-map)
+         ("<f5>" . consult-kmacro)
+         ;; C-x bindings (ctl-x-map)
+         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+         ;; Custom M-# bindings for fast register access
+         ("C-z m" . consult-register-load)
+         ("C-z '" . point-to-register)
+         ("C-z #" . consult-register)
+         ;; Other custom bindings
+         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ("<help> a" . consult-apropos)            ;; orig. apropos-command
+         ;; M-g bindings (goto-map)
+         ("M-g e" . consult-compile-error)
+         ("M-g g" . consult-goto-line)             ;; orig. goto-line
+         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+         ;; ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-g m" . consult-mark)
+         ("M-g k" . consult-global-mark)
+         ("M-g i" . consult-imenu)
+         ("M-g I" . consult-imenu-multi)
+         ;; M-s bindings (search-map)
+         ("M-s f" . consult-find)
+         ("M-s F" . consult-locate)
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
+         ("M-s m" . consult-multi-occur)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines)
+         ;; Isearch integration
+         ("M-s e" . consult-isearch)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch)                 ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch)               ;; orig. isearch-edit-string
+         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi))           ;; needed by consult-line to detect isearch
+  :init
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0
+        register-preview-function #'consult-register-format)
+
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
+
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  :config
+  (consult-customize
+   consult-theme
+   :preview-key '(:debounce 1 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-file consult--source-project-file consult--source-bookmark
+   :preview-key (kbd "M-."))
+
+  (setq consult-narrow-key "<")
+
+  (setq consult-project-root-function #'projectile-project-root))
+
+(use-package consult-flycheck
+  :bind ("M-g f" . consult-flycheck))
+
+(use-package marginalia
+  :demand
+  :bind (:map minibuffer-local-map
+              ("M-A" . marginalia-cycle))
+  :config
+  (marginalia-mode))
+
+(use-package ivy
+  :defer
+  :delight
+  :config
+  (setq ivy-count-format "%-4d "
         ivy-use-selectable-prompt t)
   (setf (alist-get t ivy-format-functions-alist) 'ivy-format-function-default))
 
 (use-package ivy-hydra :after ivy)
 
-(use-package counsel :demand
-  :after ivy
-  :delight
-  :bind (("M-X" . #'counsel-set-variable)
-         ("C-x b" . #'counsel-switch-buffer)
-         ("C-x M-b" . #'counsel-switch-buffer-other-window))
-  :config
-  (counsel-mode 1))
-
-;; Better I-search with ivy
 (use-package swiper
-  :bind ("C-s" . swiper))
+  :defer
+  :bind (("C-s" . #'swiper)
+         ("C-S-s" . #'isearch-forward)
+         :map swiper-map
+         ("M-%" . #'swiper-query-replace)))
 
 (use-package projectile
   :after which-key
@@ -471,7 +563,7 @@ Akin to `projectile-header-line''s behaviour."
   :config
   (projectile-mode 1)
   (setq projectile-project-search-path '("~/proj/")
-        projectile-completion-system 'ivy
+        projectile-completion-system 'default
         projectile-indexing-method 'alien)
   (which-key-add-keymap-based-replacements global-map
     "C-c p" '("projectile" . projectile-command-map))
@@ -485,10 +577,6 @@ Akin to `projectile-header-line''s behaviour."
   :straight (:host github :repo "leodag/projectile-header-line")
   :config
   (global-projectile-header-line-mode))
-
-(use-package counsel-projectile
-  :config
-  (counsel-projectile-mode 1))
 
 ;; Makes buffer names be unique
 (use-package uniquify :straight nil
@@ -629,15 +717,14 @@ argument, or in other frame with two arguments."
            (current-prefix-arg nil))
       (call-interactively command))))
 
-(use-package company :demand
-  :after counsel
+(use-package company
+  :demand
   :delight
   :bind* ("C-<tab>" . #'company-manual-begin)
   :bind (:map company-active-map
               ("M-." . #'company-show-location)
               ("C-<tab>" . #'company-select-next)
-              ("C-S-<iso-lefttab>" . #'company-select-previous)
-              ("C-o" . #'counsel-company))
+              ("C-S-<iso-lefttab>" . #'company-select-previous))
   :config
   (setq company-idle-delay 1.5
         company-tooltip-minimum-width 30
@@ -712,8 +799,6 @@ argument, or in other frame with two arguments."
   (setq lsp-keymap-prefix "C-c l")
   :config
   (setq lsp-clients-elixir-server-executable "elixir-ls"))
-
-(use-package lsp-ivy :defer t)
 
 (use-package elixir-mode :defer t)
 
