@@ -237,7 +237,8 @@ font presence cannot be detected."
 
 ;;; General setup
 
-(use-package simple :straight nil
+(use-package simple
+  :straight nil
   :delight auto-fill-function
   :hook ((text-mode emacs-lisp-mode) . auto-fill-mode)
   :config
@@ -262,7 +263,8 @@ font presence cannot be detected."
   :straight (:host github :repo "leodag/smart-delete")
   :hook (prog-mode . smart-delete-mode))
 
-(use-package mwheel :straight nil
+(use-package mwheel
+  :straight nil
   :config
   (setq mouse-wheel-progressive-speed nil)
   (setf (car mouse-wheel-scroll-amount) 5))
@@ -580,7 +582,8 @@ Akin to `projectile-header-line''s behaviour."
   (global-project-header-line-mode))
 
 ;; Makes buffer names be unique
-(use-package uniquify :straight nil
+(use-package uniquify
+  :straight nil
   :config
   (setq uniquify-buffer-name-style 'forward))
 
@@ -703,7 +706,7 @@ Akin to `projectile-header-line''s behaviour."
   :config
   (setq eldoc-idle-delay 0.1))
 
-(use-package xref :ensure t
+(use-package xref
   :bind ([remap xref-find-definitions] . #'ace-xref-find-definitions)
   :config
   (defun ace-xref-find-definitions (arg)
