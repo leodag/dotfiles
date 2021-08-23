@@ -989,4 +989,8 @@ were working on."
   :config
   (editorconfig-mode 1))
 
+(defun project-remember-current-project ()
+  (interactive)
+  (project-remember-project (project-current)))
+
 ;;; init.el ends here
