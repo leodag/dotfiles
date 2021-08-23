@@ -248,6 +248,7 @@ font presence cannot be detected."
         suggest-key-bindings nil))
 
 (use-package subword
+  :straight nil
   :delight
   :config
   (global-subword-mode))
@@ -256,6 +257,7 @@ font presence cannot be detected."
   :bind (("C-=" . er/expand-region)))
 
 (use-package delsel
+  :straight nil
   :config
   (delete-selection-mode))
 
@@ -270,6 +272,7 @@ font presence cannot be detected."
   (setf (car mouse-wheel-scroll-amount) 5))
 
 (use-package whitespace
+  :straight nil
   :delight whitespace-mode
   :hook ((prog-mode text-mode) . whitespace-mode)
   :config
@@ -295,11 +298,13 @@ font presence cannot be detected."
   (require 'vlf-setup))
 
 (use-package so-long
+  :straight nil
   :config
   (setq so-long-action 'so-long-minor-mode)
   (global-so-long-mode))
 
 (use-package tab-bar
+  :straight nil
   :bind (("C-S-t" . tab-new-to)
          ("C-S-w" . tab-close)
          ([C-next] . tab-next)
@@ -327,6 +332,7 @@ You should use `tab-move' for that instead, though."
   (tab-pad-bar-mode))
 
 (use-package display-line-numbers
+  :straight nil
   :hook ((prog-mode text-mode) . display-line-numbers-mode)
   :config
   (setq display-line-numbers-type t
@@ -334,6 +340,7 @@ You should use `tab-move' for that instead, though."
 
 ;; Buffer layout history (C-c <left>/<right>)
 (use-package winner
+  :straight nil
   :config
   (winner-mode 1))
 
@@ -391,6 +398,7 @@ Akin to `projectile-header-line''s behaviour."
 
 ;; Auto-reload modified files; warn on overlapping changes
 (use-package autorevert
+  :straight nil
   :delight auto-revert-mode
   :config
   (global-auto-revert-mode))
@@ -419,6 +427,7 @@ Akin to `projectile-header-line''s behaviour."
   (which-key-mode 1))
 
 (use-package ibuffer
+  :straight nil
   :bind ("C-x C-b" . ibuffer)
   :config
   (setq ibuffer-show-empty-filter-groups nil))
@@ -588,6 +597,7 @@ Akin to `projectile-header-line''s behaviour."
   (setq uniquify-buffer-name-style 'forward))
 
 (use-package hideshow
+  :straight nil
   :delight hs-minor-mode
   :hook (prog-mode . hs-minor-mode))
 
@@ -608,6 +618,7 @@ Akin to `projectile-header-line''s behaviour."
 
 ;; Highlight matching paren
 (use-package paren
+  :straight nil
   :hook (prog-mode . show-paren-mode)
   :config
   (setq show-paren-delay 0
@@ -629,6 +640,7 @@ Akin to `projectile-header-line''s behaviour."
 
 ;; Directional window selection
 (use-package windmove
+  :straight nil
   :bind* (("M-<up>" . windmove-up)
           ("M-<down>" . windmove-down)
           ("M-<right>" . windmove-right)
@@ -638,6 +650,7 @@ Akin to `projectile-header-line''s behaviour."
 
 ;; Creates matching closing delimiter
 (use-package elec-pair
+  :straight nil
   :hook (prog-mode . electric-pair-local-mode)
   :config
   (setq-default
@@ -707,11 +720,13 @@ Akin to `projectile-header-line''s behaviour."
         flycheck-posframe-border-width 1))
 
 (use-package eldoc
+  :straight nil
   :delight
   :config
   (setq eldoc-idle-delay 0.1))
 
 (use-package xref
+  :straight nil
   :bind ([remap xref-find-definitions] . #'ace-xref-find-definitions)
   :config
   (defun ace-xref-find-definitions (arg)
