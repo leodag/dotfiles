@@ -651,7 +651,14 @@ Akin to `projectile-header-line''s behaviour."
 ;;; General programming
 
 (use-package magit
-  :bind ("C-x g" . magit-status)
+  :bind (("C-x g" . magit-status)
+         :map project-prefix-map
+         ("m" . magit-project-status))
+  :init
+  ;; Since magit-extras is autoloaded we need to bind it
+  ;; ourselves or it will only be bound really late
+  (setq magit-bind-magit-project-status nil)
+  (add-to-list 'project-switch-commands '(magit-project-status "Magit") t)
   :config
   (setq magit-diff-refine-hunk t
         magit-repository-directories '(("~/proj" . 1)
