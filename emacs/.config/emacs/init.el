@@ -535,7 +535,10 @@ Akin to `projectile-header-line''s behaviour."
 
   (setq consult-narrow-key "<")
 
-  (setq consult-project-root-function #'projectile-project-root))
+  (setq consult-project-root-function
+        (lambda ()
+          (when-let (project (project-current))
+            (project-root project)))))
 
 (use-package consult-flycheck
   :bind ("M-g f" . consult-flycheck))
