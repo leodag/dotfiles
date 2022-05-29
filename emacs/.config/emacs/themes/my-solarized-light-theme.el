@@ -32,9 +32,9 @@
      `(neo-expand-btn-face ((,class (:foreground ,base01))))
 ;;;;; paren
      `(show-paren-match ((,class (:foreground ,base3 :weight bold))))
-;;;;; projectile-header-line
-     `(projectile-header-line-file ((,class (:foreground ,cyan :weight bold))))
-     `(projectile-header-line-project ((,class (:foreground ,yellow :weight bold))))
+;;;;; project-header-line
+     `(project-header-line-file ((,class (:foreground ,cyan :weight bold))))
+     `(project-header-line-project ((,class (:foreground ,yellow :weight bold))))
 ;;;;; tab-bar
      `(tab-bar ((,class (:inherit default))))
      `(tab-bar-tab ((,class (:box nil))))

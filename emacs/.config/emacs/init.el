@@ -569,10 +569,10 @@ Akin to `projectile-header-line''s behaviour."
     "s" "search"
     "x" "execute"))
 
-(use-package projectile-header-line
-  :straight (:host github :repo "leodag/projectile-header-line")
+(use-package project-header-line
+  :straight (:host github :repo "leodag/project-header-line")
   :config
-  (global-projectile-header-line-mode))
+  (global-project-header-line-mode))
 
 ;; Makes buffer names be unique
 (use-package uniquify :straight nil
