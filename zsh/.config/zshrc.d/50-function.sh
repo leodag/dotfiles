@@ -113,7 +113,8 @@ pacfilediff() {
     local tarpath=$(realpath "$1")
     tarpath=${tarpath#/}
 
-    local filename=$(echo /var/cache/pacman/pkg/$pkg-$ver-*.pkg.tar.*)
+    # may contain both .zst and .zst.sig
+    local filename=$(ls /var/cache/pacman/pkg/$pkg-$ver-*.pkg.tar.* | head -n1)
     if [[ ! -f $filename ]]; then
         echo "Error: $pkg-$ver not found in pacman's cache"
         return 52
