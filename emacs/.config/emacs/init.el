@@ -59,10 +59,10 @@
 
 (setq mouse-autoselect-window t)
 
-(defvar leodag-map (make-sparse-keymap)
+(defvar leodag-map (define-keymap)
   "My keymap.")
 
-(global-set-key (kbd "C-z") leodag-map)
+(keymap-global-set "C-z" leodag-map)
 
 
 ;;; Windows
