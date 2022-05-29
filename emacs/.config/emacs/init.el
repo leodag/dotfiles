@@ -397,6 +397,7 @@ Akin to `projectile-header-line''s behaviour."
 (use-package undo-tree
   :delight
   :config
+  (setq undo-tree-auto-save-history nil)
   (global-undo-tree-mode))
 
 (use-package multiple-cursors
