@@ -265,7 +265,7 @@ font presence cannot be detected."
 (use-package mwheel :straight nil
   :config
   (setq mouse-wheel-progressive-speed nil)
-  (setf (car mouse-wheel-scroll-amount) 2))
+  (setf (car mouse-wheel-scroll-amount) 5))
 
 (use-package whitespace
   :delight whitespace-mode
