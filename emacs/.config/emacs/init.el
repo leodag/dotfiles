@@ -928,4 +928,8 @@ were working on."
 
 (define-key leodag-map (kbd "C-o") #'pop-to-other-window)
 
+(use-package web-mode
+  :mode ("\\.x?html?\\'"
+         "\\.[lh]?eex\\'"))
+
 ;;; init.el ends here
