@@ -806,7 +806,10 @@ argument, or in other frame with two arguments."
   :config
   (setq lsp-clients-elixir-server-executable "elixir-ls"))
 
-(use-package elixir-mode :defer)
+(use-package elixir-mode :defer
+  :hook (elixir-mode . yas-minor-mode)
+  :config
+  (add-hook 'elixir-mode-hook (lambda () (show-paren-mode -1))))
 
 (use-package alchemist
   :disabled
