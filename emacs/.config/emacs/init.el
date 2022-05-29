@@ -930,7 +930,7 @@ were working on."
     (switch-to-prev-buffer nil t)
     (display-buffer cur t)))
 
-(define-key leodag-map (kbd "C-o") #'pop-to-other-window)
+(keymap-set leodag-map "C-o" #'pop-to-other-window)
 
 (use-package web-mode
   :mode ("\\.x?html?\\'"
