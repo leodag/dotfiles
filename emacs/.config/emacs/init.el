@@ -922,8 +922,9 @@ argument, or in other frame with two arguments."
 Very useful when a command decides to pop into the window you
 were working on."
   (interactive)
-  (display-buffer (current-buffer) t)
-  (switch-to-prev-buffer nil t))
+  (let ((cur (current-buffer)))
+    (switch-to-prev-buffer nil t)
+    (display-buffer cur t)))
 
 (define-key leodag-map (kbd "C-o") #'pop-to-other-window)
 
