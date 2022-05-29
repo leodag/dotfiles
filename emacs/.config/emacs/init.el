@@ -894,8 +894,11 @@ argument, or in other frame with two arguments."
 (use-package typescript-mode :defer)
 
 (use-package tide
-  :hook (((typescript-mode js-mode) . tide-setup)
-         ((typescript-mode js-mode) . eldoc-mode)
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . eldoc-mode)
+         (js-mode . (lambda () (unless (derived-mode-p 'json-mode)
+                                 (tide-setup)
+                                 (eldoc-mode))))
          (typescript-mode . tide-hl-identifier-mode)))
 
 (use-package prettier-js
