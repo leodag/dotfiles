@@ -436,6 +436,8 @@ Akin to `projectile-header-line''s behaviour."
   :bind (:map leodag-map
               ("r" . selectrum-repeat))
   :config
+  (setq selectrum-count-style 'current/matches
+        selectrum-cycle-movement t)
   (selectrum-mode 1))
 
 (use-package selectrum-prescient
