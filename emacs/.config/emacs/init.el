@@ -655,6 +655,12 @@ Akin to `projectile-header-line''s behaviour."
 (use-package magit-gitflow
   :hook (magit-mode . turn-on-magit-gitflow))
 
+(use-package ediff
+  :straight nil
+  :config
+  ;; uses the same frame for control buffer
+  (setq ediff-window-setup-function #'ediff-setup-windows-plain))
+
 (use-package diff-hl
   :config
   (diff-hl-margin-mode 1)
