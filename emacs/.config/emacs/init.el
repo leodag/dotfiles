@@ -452,6 +452,12 @@ Akin to `projectile-header-line''s behaviour."
   :init
   (setq prefix-help-command #'embark-prefix-help-command))
 
+(use-package embark-consult
+  :demand
+  :after (embark consult)
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
 (use-package consult
   :bind (("M-X" . set-variable)
          ;; C-c bindings (mode-specific-map)
