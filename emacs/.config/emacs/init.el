@@ -936,4 +936,13 @@ were working on."
   :config
   (add-to-list 'lsp-language-id-configuration '(".*\\.[lh]?eex$" . "html")))
 
+(defun project-create-dir-locals ()
+  "Edit or create a .dir-locals.el file of the project."
+  (interactive)
+  (if-let ((pr (project-current)))
+      (let ((file (expand-file-name ".dir-locals.el" (project-root pr))))
+        (when (not (file-exists-p file))
+          (make-empty-file file)))
+    (error "Already exists")))
+
 ;;; init.el ends here
