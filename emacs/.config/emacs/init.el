@@ -360,14 +360,11 @@ You should use `tab-move' for that instead, though."
   (defun neotree-find-in-projectile-root ()
     "Find file in neotree using projectile's project root."
     (interactive)
-    (let ((project-dir (projectile-project-root))
-          (file-name (buffer-file-name)))
-      (neo-global--open)
-      (unless (and project-dir (neo-global--window-exists-p))
-        (error "Failed to find projectile's root"))
-      (setq neo-buffer--start-node project-dir)
-      (neotree-refresh)
-      (neotree-find file-name)))
+    (if-let ((pr (project-current)))
+        (let ((project-dir (project-root pr))
+              (file-name (buffer-file-name)))
+          (neo-global--open-dir project-dir)
+          (neotree-find file-name))))
 
   (defun neo-hide-on-enter-file (type _full-path arg)
     "Meant to be added as a `neo-enter-hook'.
