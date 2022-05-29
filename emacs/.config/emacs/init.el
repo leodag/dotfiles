@@ -516,7 +516,8 @@ Akin to `projectile-header-line''s behaviour."
    :preview-key '(:debounce 1 any)
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
-   consult--source-file consult--source-project-file consult--source-bookmark
+   consult--source-bookmark consult--source-recent-file
+   consult--source-project-recent-file
    :preview-key (kbd "M-."))
 
   (setq consult-narrow-key "<")
