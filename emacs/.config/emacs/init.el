@@ -932,4 +932,8 @@ were working on."
   :mode ("\\.x?html?\\'"
          "\\.[lh]?eex\\'"))
 
+(use-package lsp-tailwindcss
+  :config
+  (add-to-list 'lsp-language-id-configuration '(".*\\.[lh]?eex$" . "html")))
+
 ;;; init.el ends here
