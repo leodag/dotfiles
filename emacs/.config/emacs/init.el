@@ -804,7 +804,8 @@ argument, or in other frame with two arguments."
   :init
   (setq lsp-keymap-prefix "C-c l")
   :config
-  (setq lsp-clients-elixir-server-executable "elixir-ls"))
+  (setq lsp-clients-elixir-server-executable '("elixir-ls")
+        lsp-headerline-breadcrumb-enable nil))
 
 (use-package elixir-mode :defer
   :hook (elixir-mode . yas-minor-mode)
