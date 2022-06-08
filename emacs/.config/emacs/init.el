@@ -228,8 +228,6 @@ font presence cannot be detected."
 
 ;;; Utilities
 
-(use-package tramp :defer)
-
 (use-package sudo-edit :defer)
 
 (use-package all-the-icons :defer)
