@@ -961,4 +961,8 @@ were working on."
   (setq asdf-binary "/opt/asdf-vm/bin/asdf")
   (asdf-enable))
 
+(use-package editorconfig
+  :config
+  (editorconfig-mode 1))
+
 ;;; init.el ends here
