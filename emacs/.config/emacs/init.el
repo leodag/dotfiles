@@ -653,11 +653,9 @@ Akin to `projectile-header-line''s behaviour."
 (use-package magit
   :bind ("C-x g" . magit-status)
   :config
-  (setq magit-completing-read-function 'ivy-completing-read
-        magit-diff-refine-hunk t)
-  (setq magit-repository-directories
-        '(("~/proj" . 1)
-          ("~/proj/pd" . 1))))
+  (setq magit-diff-refine-hunk t
+        magit-repository-directories '(("~/proj" . 1)
+                                       ("~/proj/pd" . 1))))
 
 (use-package magit-gitflow
   :hook (magit-mode . turn-on-magit-gitflow))
