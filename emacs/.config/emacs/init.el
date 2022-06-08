@@ -955,4 +955,10 @@ were working on."
           (make-empty-file file)))
     (error "Already exists")))
 
+(use-package asdf
+  :straight (:host github :repo "tabfugnic/asdf.el")
+  :config
+  (setq asdf-binary "/opt/asdf-vm/bin/asdf")
+  (asdf-enable))
+
 ;;; init.el ends here
