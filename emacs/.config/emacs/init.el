@@ -80,7 +80,7 @@
 
 (defvar monospace-font "Fira Mono"
   "Preferred monospace font.")
-(defvar monospace-serif-font "Linux Libertine Mono"
+(defvar monospace-serif-font "Libertinus Mono"
   "Preferred monospace serif font.")
 (defvar sans-serif-font "Fira Sans"
   "Preferred sans serif font.")
