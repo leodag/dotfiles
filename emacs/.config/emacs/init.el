@@ -718,7 +718,8 @@ Akin to `projectile-header-line''s behaviour."
   :config
   (setq posframe-mouse-banish nil
         flycheck-posframe-position 'window-bottom-left-corner
-        flycheck-posframe-border-width 1))
+        flycheck-posframe-border-width 1
+        flycheck-posframe-buffer " *flycheck-posframe-buffer*"))
 
 (use-package eldoc
   :straight nil
