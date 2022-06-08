@@ -765,6 +765,7 @@ argument, or in other frame with two arguments."
   (global-company-mode))
 
 (use-package company-box
+  :straight (:host github :repo "leodag/company-box")
   :delight
   :hook (company-mode . company-box-mode))
 
@@ -980,7 +981,7 @@ were working on."
     (error "Already exists")))
 
 (use-package asdf
-  :straight (:host github :repo "tabfugnic/asdf.el")
+  :straight (:host github :repo "leodag/asdf.el")
   :config
   (setq asdf-binary "/opt/asdf-vm/bin/asdf")
   (asdf-enable))
