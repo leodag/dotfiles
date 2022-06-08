@@ -918,7 +918,8 @@ argument, or in other frame with two arguments."
 ;;; Scratch
 
 (use-package explain-pause-mode
-  :disabled ; causes weird delays
+  ;; causes weird delays
+  :disabled
   :straight (:host github :repo "lastquestion/explain-pause-mode")
   :config
   (explain-pause-mode 1))
