@@ -890,7 +890,12 @@ argument, or in other frame with two arguments."
   :config
   (setq elpy-modules (delq 'elpy-module-yasnippet elpy-modules))
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (setq elpy-modules (delq 'elpy-module-highlight-indentation elpy-modules)))
+  (setq elpy-modules (delq 'elpy-module-highlight-indentation elpy-modules))
+  (setq python-shell-interpreter "jupyter"
+        python-shell-interpreter-args "console --simple-prompt"
+        python-shell-prompt-detect-failure-warning nil)
+  (add-to-list 'python-shell-completion-native-disabled-interpreters
+               "jupyter"))
 
 
 ;;; JavaScript/TypeScript setup
