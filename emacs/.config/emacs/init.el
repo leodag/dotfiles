@@ -345,10 +345,10 @@ You should use `tab-move' for that instead, though."
 (use-package neotree
   ;; not using #' since that inhibits `require'ing
   :bind (([f8] . neotree-select-or-deselect)
-         ([\S-f8] . neotree-find-in-projectile-root))
+         ([\S-f8] . neotree-find-in-project-root))
   :hook ((neo-enter . neo-hide-on-enter-file)
          (neo-after-create . neo-graphical-setup)
-         (neo-after-create . neo-set-projectile-header-line))
+         (neo-after-create . neo-set-project-header-line))
   :config
   (setq neo-theme 'ascii
         neo-autorefresh nil
@@ -364,7 +364,7 @@ You should use `tab-move' for that instead, though."
         (select-window (get-mru-window))
       (neotree-show)))
 
-  (defun neotree-find-in-projectile-root ()
+  (defun neotree-find-in-project-root ()
     "Find file in neotree using projectile's project root."
     (interactive)
     (if-let ((pr (project-current)))
@@ -384,14 +384,15 @@ If entering a file, hide neotree.  TYPE ARG"
     (setq cursor-type 'bar
           indicate-empty-lines nil))
 
-  (defun neo-set-projectile-header-line (&optional _window)
+  (defun neo-set-project-header-line (&optional _window)
     "Set neotree's header line to show the current project.
-Akin to `projectile-header-line''s behaviour."
+Akin to `project-header-line''s behaviour."
     (setq header-line-format
           `((:propertize " " display (space :width 1))
             "["
-            (:propertize (:eval (projectile-project-name neo-buffer--start-node))
-                         face projectile-header-line-project)
+            (:propertize (:eval (funcall project-header-line-project-name-function
+                                         neo-buffer--start-node))
+                         face project-header-line-project)
             "]"))))
 
 ;; Auto-reload modified files; warn on overlapping changes
