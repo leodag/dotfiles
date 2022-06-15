@@ -441,19 +441,19 @@ Akin to `project-header-line''s behaviour."
 (use-package ace-window
   :bind ("M-o" . ace-window))
 
-(use-package selectrum
-  :demand
-  :bind (:map leodag-map
-              ("r" . selectrum-repeat))
-  :config
-  (setq selectrum-count-style 'current/matches
-        selectrum-cycle-movement t)
-  (selectrum-mode 1))
+;; (use-package selectrum
+;;   :demand
+;;   :bind (:map leodag-map
+;;               ("r" . selectrum-repeat))
+;;   :config
+;;   (setq selectrum-count-style 'current/matches
+;;         selectrum-cycle-movement t)
+;;   (selectrum-mode 1))
 
-(use-package selectrum-prescient
-  :config
-  (selectrum-prescient-mode 1)
-  (prescient-persist-mode 1))
+;; (use-package selectrum-prescient
+;;   :config
+;;   (selectrum-prescient-mode 1)
+;;   (prescient-persist-mode 1))
 
 (use-package embark
   :bind (("C-." . embark-act)
@@ -654,13 +654,14 @@ Akin to `project-header-line''s behaviour."
 (use-package elec-pair
   :straight nil
   :hook (prog-mode . electric-pair-local-mode)
-  :config
-  (setq-default
-   electric-pair-inhibit-predicate
-   `(lambda (c)
-      (if (char-equal c ?\")
-          t
-        (,electric-pair-inhibit-predicate c)))))
+  ;; :config
+  ;; (setq-default
+  ;;  electric-pair-inhibit-predicate
+  ;;  `(lambda (c)
+  ;;     (if (char-equal c ?\")
+  ;;         t
+  ;;       (,electric-pair-inhibit-predicate c))))
+  )
 
 
 ;;; General programming
@@ -830,18 +831,20 @@ argument, or in other frame with two arguments."
 
 (use-package lsp-mode
   :defer
-  :hook ((lsp-mode . lsp-enable-which-key-integration)
-         (elixir-mode . lsp))
+  :hook (lsp-mode . lsp-enable-which-key-integration)
   :init
   (setq lsp-keymap-prefix "C-c l")
   :config
   (setq lsp-clients-elixir-server-executable '("elixir-ls")
         lsp-headerline-breadcrumb-enable nil))
 
-(use-package elixir-mode :defer
-  :hook (elixir-mode . yas-minor-mode)
-  :config
-  (add-hook 'elixir-mode-hook (lambda () (show-paren-mode -1))))
+(use-package elixir-mode
+  :hook ((elixir-mode . lsp)
+         (elixir-mode . yas-minor-mode)
+         (elixir-mode . disable-show-paren))
+  :init
+  (defun disable-show-paren ()
+    (show-paren-mode -1)))
 
 (use-package alchemist
   :disabled
@@ -995,5 +998,31 @@ were working on."
 (defun project-remember-current-project ()
   (interactive)
   (project-remember-project (project-current)))
+
+(use-package lua-mode
+  :config
+  (setq lua-indent-level 4))
+
+(use-package company-lua
+  :config
+  (add-to-list 'company-backends 'company-lua))
+
+(use-package ctrlf
+  :config
+  (ctrlf-mode 1))
+
+(use-package vertico
+  :init
+  (vertico-mode 1))
+
+(use-package orderless
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless basic)
+        ;; completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))
+        orderless-matching-styles '( orderless-prefixes orderless-literal orderless-initialism orderless-regexp)))
 
 ;;; init.el ends here
