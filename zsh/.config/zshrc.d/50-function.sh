@@ -97,9 +97,10 @@ export-terminfo() {
 
 # pacdiff is taken by pacman-contrib
 pacfilediff() {
-    if [[ $# != 1 || ! -f "$1" ]]; then
-        echo "Shows modifications done to a file since installation"
-        echo "Usage: $0 filename"
+    if [[ $# < 1 || ! -f "$1" ]]; then
+        echo "Shows modifications done to a file since installation of the package"
+        echo "If not provided, tries to locate the package in pacman's cache"
+        echo "Usage: $0 filename [package]"
         return 50
     fi
 
@@ -109,12 +110,19 @@ pacfilediff() {
         echo "Error: No package owns $1"
         return 51
     fi
+
     local ver=$(pacman -Q "$pkg" | cut -d' ' -f2)
     local tarpath=$(realpath "$1")
     tarpath=${tarpath#/}
 
     # may contain both .zst and .zst.sig
-    local filename=$(ls /var/cache/pacman/pkg/$pkg-$ver-*.pkg.tar.* | head -n1)
+    local filename
+    if [[ -n $2 ]]; then
+        filename=$2
+    else
+        filename=$(ls /var/cache/pacman/pkg/$pkg-$ver-*.pkg.tar.* | head -n1)
+    fi
+
     if [[ ! -f $filename ]]; then
         echo "Error: $pkg-$ver not found in pacman's cache"
         return 52
