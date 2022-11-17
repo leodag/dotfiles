@@ -1,3 +1,5 @@
+autoload -Uz add-zsh-hook
+
 set_titlebar() {
     print -Pn '\033]0;%n@%m %4~\007'
 }
