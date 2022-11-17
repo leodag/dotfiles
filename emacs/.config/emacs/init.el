@@ -441,19 +441,14 @@ Akin to `project-header-line''s behaviour."
 (use-package ace-window
   :bind ("M-o" . ace-window))
 
-;; (use-package selectrum
-;;   :demand
-;;   :bind (:map leodag-map
-;;               ("r" . selectrum-repeat))
-;;   :config
-;;   (setq selectrum-count-style 'current/matches
-;;         selectrum-cycle-movement t)
-;;   (selectrum-mode 1))
-
-;; (use-package selectrum-prescient
-;;   :config
-;;   (selectrum-prescient-mode 1)
-;;   (prescient-persist-mode 1))
+(use-package vertico
+  :init
+  (vertico-mode 1)
+  :config
+  (setq vertico-cycle t)
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
 
 (use-package embark
   :bind (("C-." . embark-act)
@@ -1012,10 +1007,6 @@ were working on."
 (use-package ctrlf
   :config
   (ctrlf-mode 1))
-
-(use-package vertico
-  :init
-  (vertico-mode 1))
 
 (use-package orderless
   :init
