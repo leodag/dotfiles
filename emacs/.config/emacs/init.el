@@ -822,9 +822,11 @@ argument, or in other frame with two arguments."
 (use-package flycheck-rust
   :hook (flycheck-mode . flycheck-rust-setup))
 
-(use-package racer
-  :hook ((rust-mode . racer-mode)
-         (racer-mode . eldoc-mode)))
+;; (use-package racer
+;;   :hook ((rust-mode . racer-mode)
+;;          (racer-mode . eldoc-mode))
+;;   :config
+;;   (setq racer-))
 
 
 ;;; Elixir setup
@@ -1024,5 +1026,7 @@ were working on."
         ;; completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))
         orderless-matching-styles '( orderless-prefixes orderless-literal orderless-initialism orderless-regexp)))
+
+(use-package rustic)
 
 ;;; init.el ends here
