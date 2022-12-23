@@ -329,7 +329,8 @@ You should use `tab-move' for that instead, though."
 (use-package tab-pad
   :straight (:host github :repo "leodag/tab-pad")
   :config
-  (tab-pad-bar-mode))
+  ;; (tab-pad-bar-mode)
+  )
 
 (use-package display-line-numbers
   :straight nil
