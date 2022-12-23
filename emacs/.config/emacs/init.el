@@ -985,7 +985,6 @@ were working on."
     (error "Already exists")))
 
 (use-package asdf
-  :straight (:host github :repo "leodag/asdf.el")
   :config
   (setq asdf-binary "/opt/asdf-vm/bin/asdf")
   (asdf-enable))
