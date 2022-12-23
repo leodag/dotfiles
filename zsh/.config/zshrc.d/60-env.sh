@@ -10,3 +10,7 @@ add-to-path "$HOME/.cargo/bin"
 export LESSHISTFILE=-
 
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
+
+if which go; then
+    export GOROOT=/usr/lib/go
+fi
