@@ -766,7 +766,6 @@ argument, or in other frame with two arguments."
   (global-company-mode))
 
 (use-package company-box
-  :straight (:host github :repo "leodag/company-box")
   :delight
   :hook (company-mode . company-box-mode))
 
