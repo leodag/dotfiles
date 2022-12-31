@@ -1022,4 +1022,19 @@ were working on."
 
 (use-package rustic)
 
+(use-package terraform-mode)
+
+(use-package company-terraform)
+
+(use-package go-mode)
+
+(use-package go-guru)
+
+(use-package go-eldoc)
+
+(use-package company-go
+  :config
+  (add-to-list 'company-backends 'company-go)
+  (setq company-go-show-annotation t))
+
 ;;; init.el ends here
