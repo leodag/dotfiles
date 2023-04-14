@@ -900,14 +900,9 @@ argument, or in other frame with two arguments."
 
 ;;; C# setup
 
-(use-package omnisharp
-  :after (flycheck company)
-  :hook ((csharp-mode . omnisharp-mode)
-         (csharp-mode . lonely-brace-mode))
-  :config
-  (add-to-list 'company-backends 'company-omnisharp)
-  ;; (setq omnisharp-debug t)
-  (setq omnisharp-expected-server-version "1.35.3"))
+(use-package csharp-mode
+  :hook (chsarp-mode . lsp))
+
 
 
 ;;; Python setup
