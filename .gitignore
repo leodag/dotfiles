@@ -27,3 +27,5 @@
 !zsh/.config/
 !zsh/.config/zshrc.d/
 !zsh/.config/zshrc.d/*
+
+!tilix.dconf

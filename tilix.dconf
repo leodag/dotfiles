@@ -1,0 +1,26 @@
+[/]
+focus-follow-mouse=true
+prompt-on-delete-profile=true
+use-overlay-scrollbar=false
+
+[keybindings]
+win-reorder-next-session='<Primary><Shift>Page_Down'
+win-reorder-previous-session='<Primary><Shift>Page_Up'
+win-switch-to-next-session='<Primary>Page_Down'
+win-switch-to-previous-session='<Primary>Page_Up'
+
+[profiles]
+list=['2b7c4080-0ddd-46c5-8f23-563fd3ba789d']
+
+[profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d]
+background-color='#FDF6E3'
+badge-color-set=false
+bold-color-set=false
+cursor-colors-set=false
+foreground-color='#657B83'
+highlight-colors-set=false
+palette=['#073642', '#DC322F', '#859900', '#B58900', '#268BD2', '#D33682', '#2AA198', '#EEE8D5', '#002B36', '#CB4B16', '#586E75', '#657B83', '#839496', '#6C71C4', '#93A1A1', '#FDF6E3']
+scrollback-lines=16384
+terminal-bell='icon'
+use-theme-colors=false
+visible-name='Default'
