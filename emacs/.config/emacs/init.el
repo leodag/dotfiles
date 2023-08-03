@@ -811,7 +811,8 @@ argument, or in other frame with two arguments."
 
 (use-package toml-mode :defer)
 
-(use-package rust-mode :defer)
+(use-package rust-mode
+  :hook (rust-mode . yas-minor-mode))
 
 (use-package cargo
   :hook (rust-mode . cargo-minor-mode))
