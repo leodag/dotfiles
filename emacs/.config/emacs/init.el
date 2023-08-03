@@ -836,7 +836,9 @@ argument, or in other frame with two arguments."
   (setq lsp-keymap-prefix "C-c l")
   :config
   (setq lsp-clients-elixir-server-executable '("elixir-ls")
-        lsp-headerline-breadcrumb-enable nil))
+        lsp-headerline-breadcrumb-enable nil
+        lsp-rust-analyzer-server-display-inlay-hints t
+        lsp-rust-analyzer-display-chaining-hints t))
 
 (use-package elixir-mode
   :hook ((elixir-mode . lsp)
