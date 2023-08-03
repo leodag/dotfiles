@@ -1018,7 +1018,7 @@ were working on."
         completion-category-overrides '((file (styles partial-completion)))
         orderless-matching-styles '( orderless-prefixes orderless-literal orderless-initialism orderless-regexp)))
 
-(use-package rustic)
+;; (use-package rustic)
 
 (use-package terraform-mode)
 
