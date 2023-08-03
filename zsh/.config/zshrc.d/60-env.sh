@@ -11,6 +11,6 @@ export LESSHISTFILE=-
 
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-if which go; then
+if which go > /dev/null 2>&1; then
     export GOROOT=/usr/lib/go
 fi
