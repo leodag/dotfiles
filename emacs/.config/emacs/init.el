@@ -676,7 +676,7 @@ Akin to `project-header-line''s behaviour."
   :config
   (setq magit-diff-refine-hunk t
         magit-repository-directories '(("~/proj" . 1)
-                                       ("~/proj/pd" . 1))))
+                                       ("~/proj/wild" . 1))))
 
 (use-package magit-gitflow
   :hook (magit-mode . turn-on-magit-gitflow))
