@@ -1035,4 +1035,10 @@ were working on."
   (add-to-list 'company-backends 'company-go)
   (setq company-go-show-annotation t))
 
+(use-package treesit-auto
+  :straight (:host github :repo "renzmann/treesit-auto")
+  :config
+  (setq treesit-auto-install 'prompt)
+  (global-treesit-auto-mode 1))
+
 ;;; init.el ends here
