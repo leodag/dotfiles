@@ -262,7 +262,6 @@ font presence cannot be detected."
   (delete-selection-mode))
 
 (use-package smart-delete
-  :straight (:host github :repo "leodag/smart-delete")
   :hook (prog-mode . smart-delete-mode))
 
 (use-package mwheel
