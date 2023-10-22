@@ -286,11 +286,10 @@ font presence cannot be detected."
   :hook (prog-mode . ws-butler-mode))
 
 ;; uses a strike-through face for ^L
-(use-package ff-st
-  :straight (:host github :repo "leodag/ff-st")
+(use-package form-feed-st
   :delight
   :config
-  (global-ff-st-mode))
+  (global-form-feed-st-mode))
 
 (use-package vlf
   :no-require

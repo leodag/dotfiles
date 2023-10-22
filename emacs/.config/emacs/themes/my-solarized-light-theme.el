@@ -19,10 +19,10 @@
                                             :style unspecified)))))
 ;;;;; company-mode
      `(company-tooltip-selection ((,class (:background ,blue-2bg :weight bold))))
-;;;;; ff-st
-     `(ff-st-line ((,class (:strike-through ,s-line))))
 ;;;;; flycheck-posframe
      `(flycheck-posframe-border-face ((,class (:foreground ,s-line))))
+;;;;; form-feed-st
+     `(form-feed-st-line ((,class (:strike-through ,s-line))))
 ;;;;; neotree
      `(neo-banner-face ((,class (:inherit ,s-variable-pitch :foreground ,base01))))
      `(neo-header-face ((,class (:inherit ,s-variable-pitch :foreground ,blue))))
