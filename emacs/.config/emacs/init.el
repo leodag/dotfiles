@@ -670,6 +670,7 @@ Akin to `project-header-line''s behaviour."
 
 (use-package magit
   :bind (("C-x g" . magit-status)
+         ("C-x G" . magit-status-same-window)
          :map project-prefix-map
          ("m" . magit-project-status))
   :init
@@ -680,7 +681,17 @@ Akin to `project-header-line''s behaviour."
   :config
   (setq magit-diff-refine-hunk t
         magit-repository-directories '(("~/proj" . 1)
-                                       ("~/proj/wild" . 1))))
+                                       ("~/proj/wild" . 1)))
+  (add-to-list 'display-buffer-alist
+               `(,(rx bos "magit: ")
+                 (display-buffer-reuse-window
+                  display-buffer-below-selected)))
+  (defun magit-status-same-window ()
+    "Open `magit-status' on the same window.
+DIRECTORY and CACHE are passed as-is to `magit-status'."
+    (interactive)
+    (let ((display-buffer-overriding-action '(display-buffer-same-window)))
+      (call-interactively #'magit-status))))
 
 (use-package magit-gitflow
   :hook (magit-mode . turn-on-magit-gitflow))
