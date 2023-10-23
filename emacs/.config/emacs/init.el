@@ -1020,7 +1020,7 @@ were working on."
   (setq completion-styles '(orderless basic)
         ;; completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))
-        orderless-matching-styles '( orderless-prefixes orderless-literal orderless-initialism orderless-regexp)))
+        orderless-matching-styles '(orderless-prefixes orderless-literal orderless-initialism orderless-regexp)))
 
 ;; (use-package rustic)
 
