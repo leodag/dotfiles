@@ -563,12 +563,12 @@ Akin to `project-header-line''s behaviour."
 
 (use-package ivy-hydra :after ivy)
 
-(use-package swiper
-  :defer
-  :bind (("C-s" . #'swiper)
-         ("C-S-s" . #'isearch-forward)
-         :map swiper-map
-         ("M-%" . #'swiper-query-replace)))
+;; (use-package swiper
+;;   :defer
+;;   :bind (("C-s" . #'swiper)
+;;          ("C-S-s" . #'isearch-forward)
+;;          :map swiper-map
+;;          ("M-%" . #'swiper-query-replace)))
 
 (use-package projectile
   :delight
