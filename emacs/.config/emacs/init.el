@@ -46,6 +46,10 @@
  hscroll-step 1
  scroll-preserve-screen-position t)
 
+(pixel-scroll-precision-mode 1)
+(setq pixel-scroll-precision-large-scroll-height 10.0
+      pixel-scroll-precision-interpolate-page t)
+
 (setq-default indent-tabs-mode nil)
 
 ;; Remove some unwanted behaviours
@@ -449,7 +453,9 @@ Akin to `project-header-line''s behaviour."
   (setq vertico-cycle t)
   (setq minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  (keymap-set vertico-map "<remap> <pixel-scroll-interpolate-up>" #'vertico-scroll-down)
+  (keymap-set vertico-map "<remap> <pixel-scroll-interpolate-down>" #'vertico-scroll-up))
 
 (use-package embark
   :bind (("C-." . embark-act)
