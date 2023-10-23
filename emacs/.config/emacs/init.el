@@ -963,9 +963,11 @@ argument, or in other frame with two arguments."
 Very useful when a command decides to pop into the window you
 were working on."
   (interactive)
-  (let ((cur (current-buffer)))
+  (let ((cur-buffer (current-buffer))
+        (cur-window (selected-window))
+        (mru-window (get-mru-window nil nil t)))
     (switch-to-prev-buffer nil t)
-    (display-buffer cur t)))
+    (set-window-buffer mru-window cur-buffer)))
 
 (keymap-set leodag-map "C-o" #'pop-to-other-window)
 
