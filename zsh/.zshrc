@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 export PAGER=less
 export EDITOR=nvim
 

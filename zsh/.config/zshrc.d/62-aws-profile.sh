@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 if [[ -f ~/.aws/credentials ]]; then
     local profile
     profile=$(head -n 1 ~/.aws/credentials | grep '\[.*\]')

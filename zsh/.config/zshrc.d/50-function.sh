@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 up() {
     local n=${1:-1}
 

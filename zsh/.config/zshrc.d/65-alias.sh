@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 # modified commands
 alias diff='colordiff'              # requires colordiff package
 alias grep='grep --color=auto'

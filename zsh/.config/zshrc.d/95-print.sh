@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 if commands-exist fortune cowsay; then
     fortune | cowsay -W $((COLUMNS * 3/5))
 else
