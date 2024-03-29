@@ -27,3 +27,5 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 zstyle ':completion:*' rehash true
+
+autoload bashcompinit
