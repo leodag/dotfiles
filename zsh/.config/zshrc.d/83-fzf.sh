@@ -1,9 +1,6 @@
-if [[ -f /usr/share/fzf/key-bindings.zsh ]]; then
-    source /usr/share/fzf/key-bindings.zsh
+
+if source-first-existing /usr/share/fzf/key-bindings.zsh /usr/share/doc/fzf/examples/key-bindings.zsh; then
+    source-first-existing /usr/share/fzf/completion.zsh /usr/share/doc/fzf/examples/completion.zsh
 else
     echo 'fzf not installed!'
-fi
-
-if [[ -f /usr/share/fzf/completion.zsh ]]; then
-    source /usr/share/fzf/completion.zsh
 fi
