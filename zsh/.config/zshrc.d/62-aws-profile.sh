@@ -1,10 +1,11 @@
 #!/usr/bin/env zsh
 
 if [[ -f ~/.aws/credentials ]]; then
-    local profile
-    profile=$(head -n 1 ~/.aws/credentials | grep '\[.*\]')
+    AWS_PROFILE=$(head -n 1 ~/.aws/credentials | grep '\[.*\]')
 
-    if [[ -n $profile ]]; then
-        export AWS_PROFILE=${profile:1:-1}
+    if [[ $AWS_PROFILE =~ '^\[.+\]$' ]]; then
+        export AWS_PROFILE=${AWS_PROFILE:1:-1}
+    else
+        unset AWS_PROFILE
     fi
 fi
