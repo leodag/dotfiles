@@ -50,3 +50,4 @@ alias totswap="free -m | grep Swap: | awk '{print \$2}'"
 
 alias with-docker="sudo -g docker -E"
 alias docker='with-docker docker'
+alias kind='with-docker kind'
