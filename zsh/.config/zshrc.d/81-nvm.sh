@@ -6,6 +6,4 @@ if [[ -f /usr/share/nvm/init-nvm.sh ]]; then
     if [[ ! $(nvm current) == 'system' ]]; then
         echo "NVM not using system as default"
     fi
-else
-    echo "NVM not installed!"
 fi
