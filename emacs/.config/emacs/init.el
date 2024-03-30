@@ -670,7 +670,7 @@ Akin to `project-header-line''s behaviour."
 
 (use-package magit
   :bind (("C-x g" . magit-status)
-         ("C-x G" . magit-status-same-window)
+         ("C-x G" . magit-status-below-selected)
          :map project-prefix-map
          ("m" . magit-project-status))
   :init
@@ -684,13 +684,22 @@ Akin to `project-header-line''s behaviour."
                                        ("~/proj/wild" . 1)))
   (add-to-list 'display-buffer-alist
                `(,(rx bos "magit: ")
-                 (display-buffer-reuse-window
-                  display-buffer-below-selected)))
+                 (display-buffer--maybe-same-window
+                  display-buffer-reuse-window
+                  display-buffer--maybe-pop-up-frame-or-window
+                  display-buffer-same-window)))
   (defun magit-status-same-window ()
     "Open `magit-status' on the same window.
 DIRECTORY and CACHE are passed as-is to `magit-status'."
     (interactive)
     (let ((display-buffer-overriding-action '(display-buffer-same-window)))
+      (call-interactively #'magit-status)))
+
+  (defun magit-status-below-selected ()
+    "Open `magit-status' below the selected window.
+DIRECTORY and CACHE are passed as-is to `magit-status'."
+    (interactive)
+    (let ((display-buffer-overriding-action '(display-buffer-below-selected)))
       (call-interactively #'magit-status))))
 
 (use-package magit-gitflow
