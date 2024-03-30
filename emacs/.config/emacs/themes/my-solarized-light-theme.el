@@ -16,7 +16,7 @@
                           :foreground ,s-header-line-fg
                           :background ,s-header-line-bg
                           :box (:line-width 2 :color ,s-header-line-bg
-                                            :style unspecified)))))
+                                            :style nil)))))
 ;;;;; company-mode
      `(company-tooltip-selection ((,class (:background ,blue-2bg :weight bold))))
 ;;;;; flycheck-posframe
