@@ -1069,7 +1069,11 @@ were working on."
   (setq treesit-auto-install 'prompt)
   (global-treesit-auto-mode 1))
 
-;; for ultrawide monitor
-(setq split-height-threshold 82)
+;; ultrawide monitor: 427x80
+(setq
+ ;; don't split vertically
+ split-height-threshold 82
+ ;; only split horizontally once
+ split-width-threshold 220)
 
 ;;; init.el ends here
