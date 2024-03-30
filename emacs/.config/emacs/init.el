@@ -678,6 +678,7 @@ Akin to `project-header-line''s behaviour."
   ;; ourselves or it will only be bound really late
   (setq magit-bind-magit-project-status nil)
   (add-to-list 'project-switch-commands '(magit-project-status "Magit") t)
+  (setq transient-default-level 5)
   :config
   (setq magit-diff-refine-hunk t
         magit-repository-directories '(("~/proj" . 1)
