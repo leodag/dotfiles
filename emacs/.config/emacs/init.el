@@ -39,7 +39,8 @@
 
 (setq
  ;; Amount of lines to keep above/below point
- scroll-margin 5
+ ;; FIXME: acts weird with pixel-scroll-precision for now
+ ;scroll-margin 5
  ;; A value over 100 implies never recentering
  scroll-conservatively 101
  hscroll-margin 5
