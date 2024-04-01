@@ -18,6 +18,52 @@ print_end_time() {
     print -P "Finished at %F{$TIMECOLOR}%*%f"
 }
 
+# some things taken from jonmosco/kube-ps1
+prompt_kube() {
+    if [[ $PROMPT_KUBE_ENABLED != "true" ]]; then
+        return
+    fi
+
+    local ctx
+    local ns
+    local ctxcolor=grey
+    local prompt
+
+    if ! ctx=$(kubectl config current-context 2> /dev/null); then
+        return
+    fi
+
+    ns=$(kubectl config view --minify -o=jsonpath='{..namespace}')
+
+    if [[ $ctx =~ ^arn: ]]; then
+        ## removes longest match of */
+        ctx=${ctx##*/}
+    fi
+
+    if [[ $KUBECONFIG =~ /config.dest.d/ ]]; then
+        ctxcolor=green
+    fi
+
+    prompt="%{%F{blue}%}\u2388%{%f%} %{%F{$ctxcolor}%}$ctx%{%f%}"
+
+    if [[ -n $ns ]]; then
+        prompt+=":%{%F{blue}%}$ns%{%f%}"
+    fi
+
+    echo "$prompt"
+}
+
+PROMPT_KUBE_ENABLED=true
+setopt PROMPT_SUBST
+RPROMPT="\$(prompt_kube)"
+
+kubeon() {
+    PROMPT_KUBE_ENABLED=true
+}
+kubeoff() {
+    PROMPT_KUBE_ENABLED=false
+}
+
 () {
     local SSH_COLOR
     local SSH_FAILCOLOR
