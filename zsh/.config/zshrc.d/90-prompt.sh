@@ -7,6 +7,11 @@ set_titlebar() {
 }
 add-zsh-hook precmd set_titlebar
 
+set_exectime() {
+    _exec_time=$SECONDS
+}
+add-zsh-hook preexec set_exectime
+
 # makes print_end_time not run at the first prompt
 add_print_end_time() {
     add-zsh-hook -d precmd add_print_end_time
@@ -15,7 +20,24 @@ add_print_end_time() {
 add-zsh-hook precmd add_print_end_time
 
 print_end_time() {
-    print -P "Finished at %F{$TIMECOLOR}%*%f"
+    # can be unset if e.g. you do ^C
+    if [[ -n $_exec_time ]]; then
+        local elapsed=$(($SECONDS - $_exec_time))
+        local elapsed_str
+        local elapsed_arr=()
+        unset _exec_time
+        if (( elapsed > 0 )); then
+            local elapsed_h=$((elapsed / 3600))
+            local elapsed_m=$((elapsed % 3600 / 60))
+            local elapsed_s=$((elapsed % 60))
+            (( elapsed_h > 0 )) && elapsed_arr+=(${elapsed_h}h)
+            (( elapsed_m > 0 )) && elapsed_arr+=(${elapsed_m}m)
+            (( elapsed_s > 0 )) && elapsed_arr+=(${elapsed_s}s)
+            elapsed_str=" (duration $elapsed_arr)"
+        fi
+
+        print -P "Finished at %F{$TIMECOLOR}%*%f$elapsed_str"
+    fi
 }
 
 # some things taken from jonmosco/kube-ps1
@@ -24,16 +46,19 @@ prompt_kube() {
         return
     fi
 
+    local config
     local ctx
     local ns
     local ctxcolor=grey
     local prompt
 
-    if ! ctx=$(kubectl config current-context 2> /dev/null); then
-        return
+    config=$(kubectl config view --minify -o json)
+
+    if ! ctx=$(jq -r -e '."current-context" // empty' <<< "$config"); then
+       return
     fi
 
-    ns=$(kubectl config view --minify -o=jsonpath='{..namespace}')
+    ns=$(jq -r -e '.contexts[].context.namespace // empty' <<< "$config")
 
     if [[ $ctx =~ ^arn: ]]; then
         ## removes longest match of */
@@ -107,6 +132,6 @@ kubeoff() {
     TIMECOLOR=$U_C
     PROMPT="\
 %F{$U_C}%B[%(1j.%F{$U_FC}.%F{$U_C})%j%F{$U_C}]+%f Returned %(?.%F{$U_C}.%F{$U_FC})%?%f%b
-%F{$U_C}%B[%D{%H:%M:%S}]%b%F{$U_C}[%F{$UN_C}%n%F{$U_C}@%m %4~]%B%f
+%F{$U_C}[%F{$UN_C}%n%F{$U_C}@%m %4~]%B%f
 %#%b "
 }
