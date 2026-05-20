@@ -691,6 +691,7 @@ Akin to `project-header-line''s behaviour."
 ;;; General programming
 
 (use-package magit
+  :after (project)
   :bind (("C-x g" . magit-status)
          ("C-x G" . magit-status-below-selected)
          :map project-prefix-map
