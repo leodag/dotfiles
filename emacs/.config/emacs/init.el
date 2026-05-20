@@ -39,8 +39,9 @@
 
 (setq
  ;; Amount of lines to keep above/below point
- ;; FIXME: acts weird with pixel-scroll-precision for now
- ;scroll-margin 5
+ scroll-margin 5
+ ;; Limit scroll margin to 20% of visible lines
+ maximum-scroll-margin .2
  ;; A value over 100 implies never recentering
  scroll-conservatively 101
  hscroll-margin 5
@@ -537,7 +538,8 @@ Akin to `project-header-line''s behaviour."
    consult--source-project-recent-file
    :preview-key "M-.")
 
-  (setq consult-narrow-key "<")
+  (setq consult-narrow-key "<"
+        consult-line-start-from-top t)
 
   (setq consult-project-root-function
         (lambda ()
@@ -1010,11 +1012,15 @@ were working on."
           (make-empty-file file)))
     (error "Already exists")))
 
-(use-package asdf
-  :straight (:host github :repo "tabfugnic/asdf.el")
+;; (use-package asdf
+;;   :straight (:host github :repo "tabfugnic/asdf.el")
+;;   :config
+;;   (setq asdf-binary "/opt/asdf-vm/bin/asdf")
+;;   (asdf-enable))
+
+(use-package mise
   :config
-  (setq asdf-binary "/opt/asdf-vm/bin/asdf")
-  (asdf-enable))
+  (global-mise-mode))
 
 (use-package editorconfig
   :config
