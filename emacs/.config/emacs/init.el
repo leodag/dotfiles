@@ -287,6 +287,12 @@ font presence cannot be detected."
 
 ;; Whitespace cleaning (trailing whitespaces mostly)
 (use-package ws-butler
+  ;; should be fixed with https://github.com/radian-software/straight.el/issues/1259
+  :straight (:type git
+             :repo "https://github.com/emacsmirror/nongnu_elpa"
+             :branch "elpa/ws-butler"
+             :depth (full single-branch)
+             :local-repo "ws-butler")
   :delight
   :hook (prog-mode . ws-butler-mode))
 
