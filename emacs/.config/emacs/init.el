@@ -461,6 +461,7 @@ Akin to `project-header-line''s behaviour."
   (setq vertico-cycle t)
   (setq minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
+
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
   (keymap-set vertico-map "<remap> <pixel-scroll-interpolate-up>" #'vertico-scroll-down)
   (keymap-set vertico-map "<remap> <pixel-scroll-interpolate-down>" #'vertico-scroll-up))
