@@ -6,7 +6,7 @@ declare -A keys
 
 # workaround for incomplete terminfo, or combinations not in terminfo
 # Tilix
-if [[ -n "$TILIX_ID" ]]; then
+if [[ -n "$TILIX_ID" || -n "$GHOSTTY_RESOURCES_DIR" ]]; then
     # C-<Right>
     keys[kcrit]="\e[1;5C"
     # C-<Left>
