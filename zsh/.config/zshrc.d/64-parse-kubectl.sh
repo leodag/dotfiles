@@ -22,7 +22,11 @@ zle-reorder-kubectl() {
         fi
     done
 
+    # only reorder part before the pipe
+    # z splits like the shell (considers quoting)
+    # Q removes one level of quotes (the called function always quotes)
     parts=("${(@Q)${(z)$(_reorder_kubectl_parseopts "${(@)buf:1:$((kubectl_end - 1))}")}}")
+    # post-pipe is passed as-is
     parts+=("${(@)buf:$kubectl_end:$elts}")
 
     BUFFER=$parts
@@ -63,8 +67,9 @@ _reorder_kubectl_parseopts() {
 
     result=(kubectl "${(@)ctx}" "${(@)ns}" "${(@)rest}" "${(@)out}")
 
+    # qq always single quotes. this guarantees we won't mess splitting, then we "decode" with Q
     echo "${(@qq)result}"
 }
 
 zle -N zle-reorder-kubectl
-bindkey '^[k' zle-reorder-kubectl
+#bindkey '^[k' zle-reorder-kubectl
