@@ -1107,4 +1107,13 @@ were working on."
  ;; only split horizontally once
  split-width-threshold 220)
 
+(use-package jsonnet-mode :defer t)
+
+(use-package helpful
+  :bind
+  (("C-h f" . #'helpful-callable)
+   ("C-h v" . #'helpful-variable)
+   ("C-h k" . #'helpful-key)
+   ("C-h x" . #'helpful-command)))
+
 ;;; init.el ends here
