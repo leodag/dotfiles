@@ -372,7 +372,7 @@ You should use `tab-move' for that instead, though."
       (neotree-show)))
 
   (defun neotree-find-in-project-root ()
-    "Find file in neotree using projectile's project root."
+    "Find file in neotree using project.el's project root."
     (interactive)
     (if-let ((pr (project-current)))
         (let ((project-dir (project-root pr))
