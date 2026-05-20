@@ -28,4 +28,9 @@
 !zsh/.config/zshrc.d/
 !zsh/.config/zshrc.d/*
 
+!ghostty/
+!ghostty/.config/
+!ghostty/.config/ghostty/
+!ghostty/.config/ghostty/config
+
 !tilix.dconf
