@@ -1075,9 +1075,12 @@ were working on."
 
 ;; (use-package rustic)
 
-(use-package terraform-mode)
+(use-package terraform-mode
+  :hook (terraform-mode . terraform-format-on-save-mode))
 
-(use-package company-terraform)
+(use-package company-terraform
+  :config
+  (company-terraform-init))
 
 (use-package go-mode)
 
