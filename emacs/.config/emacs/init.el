@@ -713,6 +713,14 @@ Akin to `project-header-line''s behaviour."
                   display-buffer-reuse-window
                   display-buffer--maybe-pop-up-frame-or-window
                   display-buffer-same-window)))
+
+  (setq magit-process-yes-or-no-prompt-regexp
+        (concat
+         " [([']\\([Yy]\\(?:es\\)?\\)"
+         "\\(?:[/|]\\|' to confirm, '\\)"
+         "\\([Nn]o?\\)\\(?:/\\[fingerprint\\]\\|' to cancel\\)?[])]"
+         " ?[?:]? *$"))
+
   (defun magit-status-same-window ()
     "Open `magit-status' on the same window.
 DIRECTORY and CACHE are passed as-is to `magit-status'."
