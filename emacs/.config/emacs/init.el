@@ -703,6 +703,7 @@ Akin to `project-header-line''s behaviour."
   (setq transient-default-level 5)
   :config
   (setq magit-diff-refine-hunk t
+        magit-branch-read-upstream-first nil ; read new branch name before upstream
         magit-repository-directories '(("~/proj" . 1)
                                        ("~/proj/wild" . 1)))
   (add-to-list 'display-buffer-alist
