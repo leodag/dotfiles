@@ -598,6 +598,19 @@ Akin to `project-header-line''s behaviour."
     "s" "search"
     "x" "execute"))
 
+(use-package project
+  :demand
+  :straight nil
+  :bind (:map project-prefix-map
+         ("R" . consult-ripgrep-project))
+  :config
+  (defun consult-ripgrep-project ()
+    "Search with `rg' for files in the project's root."
+    (interactive)
+    (if-let ((root (project-root (project-current t))))
+        (consult-ripgrep root)))
+  (add-to-list 'project-switch-commands '(consult-ripgrep-project "Ripgrep") t))
+
 (use-package project-header-line
   :straight (:host github :repo "leodag/project-header-line")
   :config
