@@ -1059,14 +1059,6 @@ were working on."
   (interactive)
   (project-remember-project (project-current)))
 
-(use-package lua-mode
-  :config
-  (setq lua-indent-level 4))
-
-(use-package company-lua
-  :config
-  (add-to-list 'company-backends 'company-lua))
-
 (use-package ctrlf
   :config
   (ctrlf-mode 1))
