@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-export PAGER=less
+export PAGER="less -R"
 export EDITOR=nvim
 
 add-to-path /usr/lib/ccache/bin
